@@ -1,0 +1,21 @@
+{
+  "short_name": "Kabadiwala",
+  "name": "Kabadiwala Connect - Informal E-Waste to Circular Chain",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192' fill='%2316a34a'><rect width='192' height='192' rx='36' fill='%23166534'/><path d='M60 140h72V52H60v88zm-36-16h28V68H24v56zm120-56v56h28V68h-28z' fill='%23ffffff'/></svg>",
+      "type": "image/svg+xml",
+      "sizes": "192x192"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' fill='%2316a34a'><rect width='512' height='512' rx='96' fill='%23166534'/><path d='M160 380h192V140H160v240zm-96-44h76V180H64v156zm320-156v156h76V180h-76z' fill='%23ffffff'/></svg>",
+      "type": "image/svg+xml",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#166534",
+  "theme_color": "#166534",
+  "display": "standalone",
+  "orientation": "portrait"
+}
