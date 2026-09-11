@@ -17,7 +17,9 @@ import {
   X,
   Award,
   Sparkles,
-  ArrowLeft
+  ArrowLeft,
+  List,
+  Map as MapIcon
 } from 'lucide-react';
 
 // Fix leaflet icon default asset paths in Vite
@@ -36,6 +38,7 @@ export const RecyclerLocator: React.FC = () => {
   const navigate = useNavigate();
   const [recyclers, setRecyclers] = useState<RecyclerFacility[]>([]);
   const [maxDistance, setMaxDistance] = useState<number>(50);
+  const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
   const [loading, setLoading] = useState(true);
   const [selectedFacilityForPickup, setSelectedFacilityForPickup] = useState<RecyclerFacility | null>(null);
   const [pickupDate, setPickupDate] = useState<string>('2026-09-12');
@@ -79,87 +82,114 @@ export const RecyclerLocator: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-24 max-w-5xl mx-auto px-4 sm:px-6 sm:border-x sm:border-slate-200">
+    <div className="min-h-screen bg-slate-50 pb-32 sm:pb-24 pb-safe max-w-5xl mx-auto px-3 sm:px-6 sm:border-x sm:border-slate-200">
       {/* Top Header */}
-      <div className="bg-white border-b border-slate-200 p-4 sticky top-14 z-30 flex items-center justify-between rounded-b-2xl shadow-xs">
-        <div className="flex items-center gap-3">
+      <div className="bg-white border-b border-slate-200 p-3 sm:p-4 sticky top-14 z-30 flex items-center justify-between rounded-b-2xl shadow-xs">
+        <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
           <button
             onClick={() => navigate('/collector')}
-            className="p-2 rounded-xl hover:bg-slate-100 text-slate-600 transition"
+            className="p-2 rounded-xl hover:bg-slate-100 text-slate-600 transition touch-manipulation active:scale-95 flex-shrink-0"
             aria-label="Back to Collector Home"
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
-          <div>
-            <h2 className="text-xl font-black text-slate-900 leading-tight">
+          <div className="min-w-0">
+            <h2 className="text-base sm:text-xl font-black text-slate-900 leading-tight truncate">
               {t('locator_title')}
             </h2>
-            <p className="text-xs text-slate-500 font-medium">
-              CPCB / State Pollution Control Board Registered (Demo Data)
+            <p className="text-[10px] sm:text-xs text-slate-500 font-medium truncate">
+              CPCB / SPCB Authorized Facilities (Demo)
             </p>
           </div>
         </div>
 
-        <span className="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold">
+        <span className="px-2 sm:px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[11px] sm:text-xs font-bold flex-shrink-0">
           {recyclers.length} Facilities
         </span>
       </div>
 
-      {/* Distance Filter Chips */}
-      <div className="p-3 bg-white border-b border-slate-100 flex gap-2 overflow-x-auto no-scrollbar">
-        {[
-          { label: '5 KM', val: 5 },
-          { label: '10 KM', val: 10 },
-          { label: '25 KM', val: 25 },
-          { label: 'All Distances', val: 100 }
-        ].map((f) => (
+      {/* Distance & View Controls Bar */}
+      <div className="p-2.5 sm:p-3 bg-white border-b border-slate-100 flex items-center justify-between gap-2">
+        {/* Distance Filter Chips */}
+        <div className="flex gap-1.5 overflow-x-auto no-scrollbar py-0.5">
+          {[
+            { label: '5 KM', val: 5 },
+            { label: '10 KM', val: 10 },
+            { label: '25 KM', val: 25 },
+            { label: 'All', val: 100 }
+          ].map((f) => (
+            <button
+              key={f.val}
+              onClick={() => setMaxDistance(f.val)}
+              className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[11px] sm:text-xs font-bold whitespace-nowrap transition border touch-manipulation ${
+                maxDistance === f.val
+                  ? 'bg-slate-900 text-white border-slate-900 shadow-xs'
+                  : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
+              }`}
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Mobile View Toggle: List vs Map */}
+        <div className="inline-flex items-center bg-slate-100 p-0.5 rounded-xl border border-slate-200 flex-shrink-0">
           <button
-            key={f.val}
-            onClick={() => setMaxDistance(f.val)}
-            className={`px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition border ${
-              maxDistance === f.val
-                ? 'bg-slate-900 text-white border-slate-900 shadow-xs'
-                : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
+            onClick={() => setViewMode('list')}
+            className={`px-2 sm:px-2.5 py-1 rounded-lg text-xs font-bold transition flex items-center gap-1 touch-manipulation ${
+              viewMode === 'list' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-800'
             }`}
           >
-            {f.label}
+            <List className="w-3.5 h-3.5" />
+            <span className="hidden xs:inline">List</span>
           </button>
-        ))}
-      </div>
-
-      {/* Interactive Leaflet Map */}
-      <div className="h-56 w-full bg-slate-200 relative border-b border-slate-200">
-        <MapContainer
-          center={[19.0760, 72.8777]}
-          zoom={10}
-          scrollWheelZoom={false}
-          className="w-full h-full"
-        >
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-          {recyclers.map((r) => (
-            <Marker
-              key={r.id}
-              position={[r.latitude, r.longitude]}
-              icon={customIcon}
-            >
-              <Popup>
-                <div className="p-1 text-xs">
-                  <span className="font-bold block text-slate-900">{r.facility_name}</span>
-                  <span className="text-[10px] text-emerald-700 font-semibold block">
-                    Rating: {r.rating} / 5.0 • {r.distanceKm} km
-                  </span>
-                </div>
-              </Popup>
-            </Marker>
-          ))}
-        </MapContainer>
-        <div className="absolute bottom-2 right-2 z-[400] bg-white/90 backdrop-blur-xs px-2 py-0.5 rounded text-[10px] font-bold text-slate-600 shadow-xs">
-          OpenStreetMap
+          <button
+            onClick={() => setViewMode('map')}
+            className={`px-2 sm:px-2.5 py-1 rounded-lg text-xs font-bold transition flex items-center gap-1 touch-manipulation ${
+              viewMode === 'map' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-800'
+            }`}
+          >
+            <MapIcon className="w-3.5 h-3.5" />
+            <span className="hidden xs:inline">Map</span>
+          </button>
         </div>
       </div>
+
+      {/* Interactive Leaflet Map (Shown when viewMode === 'map' or on larger screens) */}
+      {viewMode === 'map' && (
+        <div className="h-64 sm:h-72 w-full bg-slate-200 relative border-b border-slate-200 animate-fade-in">
+          <MapContainer
+            center={[19.0760, 72.8777]}
+            zoom={10}
+            scrollWheelZoom={false}
+            className="w-full h-full"
+          >
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            {recyclers.map((r) => (
+              <Marker
+                key={r.id}
+                position={[r.latitude, r.longitude]}
+                icon={customIcon}
+              >
+                <Popup>
+                  <div className="p-1 text-xs">
+                    <span className="font-bold block text-slate-900">{r.facility_name}</span>
+                    <span className="text-[10px] text-emerald-700 font-semibold block">
+                      Rating: {r.rating} / 5.0 • {r.distanceKm} km
+                    </span>
+                  </div>
+                </Popup>
+              </Marker>
+            ))}
+          </MapContainer>
+          <div className="absolute bottom-2 right-2 z-[400] bg-white/90 backdrop-blur-xs px-2 py-0.5 rounded text-[10px] font-bold text-slate-600 shadow-xs">
+            OpenStreetMap
+          </div>
+        </div>
+      )}
 
       {/* Recycler Cards List */}
       <div className="p-4 space-y-3.5">

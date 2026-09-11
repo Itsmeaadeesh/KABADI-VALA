@@ -43,22 +43,22 @@ export const SafetyCenter: React.FC = () => {
   const dos = guides.filter((g) => g.type === 'DO');
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-24 max-w-4xl mx-auto px-4 sm:px-6 sm:border-x sm:border-slate-200">
+    <div className="min-h-screen bg-slate-50 pb-32 sm:pb-24 pb-safe max-w-4xl mx-auto px-3 sm:px-6 sm:border-x sm:border-slate-200">
       {/* Top Header */}
-      <div className="bg-white border-b border-slate-200 p-4 sticky top-14 z-30 flex items-center justify-between rounded-b-2xl shadow-xs">
-        <div className="flex items-center gap-3">
+      <div className="bg-white border-b border-slate-200 p-3 sm:p-4 sticky top-14 z-30 flex items-center justify-between rounded-b-2xl shadow-xs">
+        <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
           <button
             onClick={() => navigate('/collector')}
-            className="p-2 rounded-xl hover:bg-slate-100 text-slate-600 transition"
+            className="p-2 rounded-xl hover:bg-slate-100 text-slate-600 transition touch-manipulation active:scale-95 flex-shrink-0"
             aria-label="Back to Collector Home"
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
-          <div>
-            <h2 className="text-xl font-black text-slate-900 leading-tight">
+          <div className="min-w-0">
+            <h2 className="text-base sm:text-xl font-black text-slate-900 leading-tight truncate">
               {t('safety_title')}
             </h2>
-            <p className="text-xs text-slate-500 font-medium">
+            <p className="text-[10px] sm:text-xs text-slate-500 font-medium truncate">
               Safe e-waste handling & health guidelines
             </p>
           </div>
@@ -74,9 +74,9 @@ export const SafetyCenter: React.FC = () => {
         />
       </div>
 
-      <div className="p-4 space-y-5">
+      <div className="p-3 sm:p-4 space-y-4 sm:space-y-5">
         {/* Intro banner */}
-        <div className="bg-emerald-50 border border-emerald-200 rounded-3xl p-4 text-emerald-900 text-xs flex items-start gap-3">
+        <div className="bg-emerald-50 border border-emerald-200 rounded-2xl sm:rounded-3xl p-3.5 sm:p-4 text-emerald-900 text-xs flex items-start gap-3">
           <ShieldAlert className="w-5 h-5 text-emerald-700 flex-shrink-0 mt-0.5" />
           <p className="leading-relaxed font-medium">
             {t('safety_desc')}

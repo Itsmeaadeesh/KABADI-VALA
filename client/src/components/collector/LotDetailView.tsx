@@ -64,21 +64,21 @@ export const LotDetailView: React.FC = () => {
   const matName = (language === 'hi' ? lot.material_name_hi : lot.material_name) || 'E-Waste Component';
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-20 max-w-3xl mx-auto px-4 sm:px-6 sm:border-x sm:border-slate-200">
+    <div className="min-h-screen bg-slate-50 pb-28 sm:pb-20 pb-safe max-w-3xl mx-auto px-3 sm:px-6 sm:border-x sm:border-slate-200">
       {/* Header */}
-      <div className="bg-white border-b border-slate-200 p-4 sticky top-14 z-30 flex items-center justify-between rounded-b-2xl shadow-xs">
-        <div className="flex items-center gap-3">
+      <div className="bg-white border-b border-slate-200 p-3 sm:p-4 sticky top-14 z-30 flex items-center justify-between rounded-b-2xl shadow-xs">
+        <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
           <button
             onClick={() => navigate('/lots')}
-            className="p-2 rounded-xl hover:bg-slate-100 text-slate-600 transition"
+            className="p-2 rounded-xl hover:bg-slate-100 text-slate-600 transition touch-manipulation active:scale-95 flex-shrink-0"
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
-          <div>
-            <span className="font-mono text-xs font-bold text-slate-500 block">
+          <div className="min-w-0">
+            <span className="font-mono text-[10px] sm:text-xs font-bold text-slate-500 block truncate">
               {lot.code}
             </span>
-            <h2 className="text-base font-black text-slate-900 leading-tight">
+            <h2 className="text-base sm:text-lg font-black text-slate-900 leading-tight truncate">
               {matName}
             </h2>
           </div>
@@ -86,16 +86,16 @@ export const LotDetailView: React.FC = () => {
 
         <button
           onClick={() => window.print()}
-          className="p-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-bold flex items-center gap-1"
+          className="p-2 sm:px-3 sm:py-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-bold flex items-center gap-1 touch-manipulation active:scale-95 flex-shrink-0"
         >
           <Printer className="w-4 h-4" />
           <span className="hidden sm:inline">Print Receipt</span>
         </button>
       </div>
 
-      <div className="p-4 space-y-4">
+      <div className="p-3 sm:p-4 space-y-3.5 sm:space-y-4">
         {/* Lot Card */}
-        <div className="bg-white rounded-3xl p-5 shadow-sm border border-slate-200">
+        <div className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-sm border border-slate-200">
           <div className="rounded-2xl overflow-hidden aspect-[16/10] bg-slate-900 mb-4 relative">
             <img
               src={lot.photo_url}

@@ -17,29 +17,33 @@ export const CollectorBottomNav: React.FC = () => {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-slate-200 shadow-lg md:hidden">
-      <div className="grid grid-cols-5 h-16">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-lg md:hidden pb-[env(safe-area-inset-bottom,0px)]">
+      <div className="grid grid-cols-5 h-15 max-w-lg mx-auto">
         {navItems.map((item) => {
           const Icon = item.icon;
-          const isActive = location.pathname === item.path || (item.path === '/collector' && location.pathname === '/');
+          const isActive =
+            location.pathname === item.path ||
+            (item.path === '/collector' && location.pathname === '/');
+
           return (
             <button
               key={item.path}
               onClick={() => navigate(item.path)}
-              className={`flex flex-col items-center justify-center gap-1 transition-colors ${
+              className={`flex flex-col items-center justify-center gap-0.5 py-1 px-1 transition-all active:scale-95 touch-manipulation select-none ${
                 isActive
-                  ? 'text-brand-700 font-black'
-                  : 'text-slate-500 hover:text-slate-800 font-medium'
+                  ? 'text-emerald-700 font-black'
+                  : 'text-slate-500 hover:text-slate-800 font-semibold'
               }`}
+              aria-label={item.label}
             >
               <div
-                className={`p-1 rounded-xl transition-all ${
-                  isActive ? 'bg-brand-100 text-brand-700' : ''
+                className={`p-1.5 rounded-xl transition-all ${
+                  isActive ? 'bg-emerald-100/90 text-emerald-700 scale-105' : ''
                 }`}
               >
-                <Icon className={`w-5 h-5 ${isActive ? 'stroke-[2.5]' : ''}`} />
+                <Icon className={`w-5 h-5 ${isActive ? 'stroke-[2.5]' : 'stroke-2'}`} />
               </div>
-              <span className="text-[10px] leading-tight truncate px-1">
+              <span className="text-[10px] leading-tight truncate max-w-[56px] text-center">
                 {item.label}
               </span>
             </button>

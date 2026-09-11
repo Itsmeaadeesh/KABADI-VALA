@@ -47,22 +47,22 @@ export const KhataPassbook: React.FC = () => {
     : `Mera Khata: Total earnings this month is ₹${summary.thisMonthEarnings.toLocaleString('en-IN')}, with ₹${summary.pendingAmount.toLocaleString('en-IN')} pending verification.`;
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-24 max-w-4xl mx-auto px-4 sm:px-6 sm:border-x sm:border-slate-200">
+    <div className="min-h-screen bg-slate-50 pb-32 sm:pb-24 pb-safe max-w-4xl mx-auto px-3 sm:px-6 sm:border-x sm:border-slate-200">
       {/* Top Header */}
-      <div className="bg-white border-b border-slate-200 p-4 sticky top-14 z-30 flex items-center justify-between rounded-b-2xl shadow-xs">
-        <div className="flex items-center gap-3">
+      <div className="bg-white border-b border-slate-200 p-3 sm:p-4 sticky top-14 z-30 flex items-center justify-between rounded-b-2xl shadow-xs">
+        <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
           <button
             onClick={() => navigate('/collector')}
-            className="p-2 rounded-xl hover:bg-slate-100 text-slate-600 transition"
+            className="p-2 rounded-xl hover:bg-slate-100 text-slate-600 transition touch-manipulation active:scale-95 flex-shrink-0"
             aria-label="Back to Collector Home"
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
-          <div>
-            <h2 className="text-xl font-black text-slate-900 leading-tight">
+          <div className="min-w-0">
+            <h2 className="text-base sm:text-xl font-black text-slate-900 leading-tight truncate">
               {t('khata_title')}
             </h2>
-            <p className="text-xs text-slate-500 font-medium">
+            <p className="text-[10px] sm:text-xs text-slate-500 font-medium truncate">
               Verifiable digital earnings & passbook
             </p>
           </div>
@@ -71,43 +71,43 @@ export const KhataPassbook: React.FC = () => {
         <VoiceButton textToSpeak={speechPhrase} size="sm" />
       </div>
 
-      <div className="p-4 space-y-4">
+      <div className="p-3 sm:p-4 space-y-3.5 sm:space-y-4">
         {/* Main Earnings Card */}
-        <div className="bg-gradient-to-br from-slate-900 via-emerald-950 to-slate-900 text-white p-6 rounded-3xl shadow-xl border border-emerald-800/40 relative overflow-hidden">
+        <div className="bg-gradient-to-br from-slate-900 via-emerald-950 to-slate-900 text-white p-4 sm:p-6 rounded-2xl sm:rounded-3xl shadow-xl border border-emerald-800/40 relative overflow-hidden">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-[11px] font-bold text-emerald-300 uppercase tracking-wider">
+            <span className="text-[10px] sm:text-[11px] font-bold text-emerald-300 uppercase tracking-wider">
               {t('this_month_earnings')} (Sept 2026)
             </span>
-            <span className="text-[10px] bg-emerald-400 text-slate-950 px-2.5 py-0.5 rounded-full font-black flex items-center gap-1">
+            <span className="text-[9px] sm:text-[10px] bg-emerald-400 text-slate-950 px-2 sm:px-2.5 py-0.5 rounded-full font-black flex items-center gap-1">
               <CheckCircle2 className="w-3 h-3 text-slate-950" />
               <span>Verified Bank Sync</span>
             </span>
           </div>
 
-          <div className="text-4xl font-black text-white my-1 tracking-tight">
+          <div className="text-3xl sm:text-4xl font-black text-white my-1 tracking-tight">
             ₹{summary.thisMonthEarnings.toLocaleString('en-IN')}
           </div>
-          <p className="text-xs text-slate-300 font-medium">
+          <p className="text-[11px] sm:text-xs text-slate-300 font-medium">
             Recorded through authorized recycling manifests
           </p>
 
           {/* Quick Metrics Grid */}
-          <div className="grid grid-cols-3 gap-2 mt-4 pt-3 border-t border-white/10 text-center">
-            <div className="bg-white/5 p-2 rounded-2xl">
-              <span className="text-[10px] text-purple-200 block uppercase font-bold">Pending</span>
-              <span className="text-sm font-black text-amber-400">
+          <div className="grid grid-cols-3 gap-2 mt-3 sm:mt-4 pt-3 border-t border-white/10 text-center">
+            <div className="bg-white/5 p-2 rounded-xl sm:rounded-2xl">
+              <span className="text-[9px] sm:text-[10px] text-purple-200 block uppercase font-bold">Pending</span>
+              <span className="text-xs sm:text-sm font-black text-amber-400">
                 ₹{summary.pendingAmount.toLocaleString('en-IN')}
               </span>
             </div>
-            <div className="bg-white/5 p-2 rounded-2xl">
-              <span className="text-[10px] text-purple-200 block uppercase font-bold">Completed</span>
-              <span className="text-sm font-black text-emerald-400">
+            <div className="bg-white/5 p-2 rounded-xl sm:rounded-2xl">
+              <span className="text-[9px] sm:text-[10px] text-purple-200 block uppercase font-bold">Completed</span>
+              <span className="text-xs sm:text-sm font-black text-emerald-400">
                 {summary.completedLotsCount}
               </span>
             </div>
-            <div className="bg-white/5 p-2 rounded-2xl">
-              <span className="text-[10px] text-purple-200 block uppercase font-bold">In Transit</span>
-              <span className="text-sm font-black text-blue-400">
+            <div className="bg-white/5 p-2 rounded-xl sm:rounded-2xl">
+              <span className="text-[9px] sm:text-[10px] text-purple-200 block uppercase font-bold">In Transit</span>
+              <span className="text-xs sm:text-sm font-black text-blue-400">
                 {summary.inTransitCount}
               </span>
             </div>

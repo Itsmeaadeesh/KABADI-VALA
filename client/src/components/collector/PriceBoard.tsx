@@ -77,22 +77,22 @@ export const PriceBoard: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-24 max-w-4xl mx-auto px-4 sm:px-6 sm:border-x sm:border-slate-200">
+    <div className="min-h-screen bg-slate-50 pb-32 sm:pb-24 pb-safe max-w-4xl mx-auto px-3 sm:px-6 sm:border-x sm:border-slate-200">
       {/* Top Header */}
-      <div className="bg-white border-b border-slate-200 p-4 sticky top-14 z-30 flex items-center justify-between rounded-b-2xl shadow-xs">
-        <div className="flex items-center gap-3">
+      <div className="bg-white border-b border-slate-200 p-3 sm:p-4 sticky top-14 z-30 flex items-center justify-between rounded-b-2xl shadow-xs">
+        <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
           <button
             onClick={() => navigate('/collector')}
-            className="p-2 rounded-xl hover:bg-slate-100 text-slate-600 transition"
+            className="p-2 rounded-xl hover:bg-slate-100 text-slate-600 transition touch-manipulation active:scale-95 flex-shrink-0"
             aria-label="Back to Collector Home"
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
-          <div>
-            <h2 className="text-xl font-black text-slate-900 leading-tight">
+          <div className="min-w-0">
+            <h2 className="text-base sm:text-xl font-black text-slate-900 leading-tight truncate">
               {t('price_board_title')}
             </h2>
-            <p className="text-xs text-slate-500 font-medium">
+            <p className="text-[10px] sm:text-xs text-slate-500 font-medium truncate">
               Ministry of Mines benchmark rates
             </p>
           </div>
@@ -108,9 +108,9 @@ export const PriceBoard: React.FC = () => {
         />
       </div>
 
-      <div className="p-4 space-y-4">
+      <div className="p-3 sm:p-4 space-y-3.5 sm:space-y-4">
         {/* Interactive Chart Box */}
-        <div className="bg-white p-4 rounded-3xl border border-slate-200 shadow-sm">
+        <div className="bg-white p-3.5 sm:p-4 rounded-2xl sm:rounded-3xl border border-slate-200 shadow-sm">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-black text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5 text-brand-600 fill-current" />

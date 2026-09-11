@@ -46,42 +46,42 @@ export const JuryTourModal: React.FC<JuryTourModalProps> = ({ onClose, onNavigat
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/85 backdrop-blur-md animate-fade-in">
-      <div className="bg-white rounded-3xl max-w-xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-slate-200 overflow-hidden animate-scale-up">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-4 bg-slate-900/85 backdrop-blur-md animate-fade-in">
+      <div className="bg-white rounded-2xl sm:rounded-3xl max-w-xl w-full max-h-[92vh] flex flex-col shadow-2xl border border-slate-200 overflow-hidden animate-scale-up">
         {/* Header */}
-        <div className="p-6 bg-gradient-to-r from-slate-900 to-brand-950 text-white flex items-center justify-between border-b border-brand-900/50">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-brand-500/20 text-brand-400 rounded-xl flex items-center justify-center border border-brand-500/30">
-              <Award className="w-6 h-6" />
+        <div className="p-3.5 sm:p-6 bg-gradient-to-r from-slate-900 to-brand-950 text-white flex items-center justify-between border-b border-brand-900/50">
+          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-brand-500/20 text-brand-400 rounded-xl flex items-center justify-center border border-brand-500/30 flex-shrink-0">
+              <Award className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
-            <div>
-              <span className="text-[11px] font-bold text-brand-400 tracking-wider uppercase">
+            <div className="min-w-0">
+              <span className="text-[10px] sm:text-[11px] font-bold text-brand-400 tracking-wider uppercase block truncate">
                 SIH Problem Statement 26229
               </span>
-              <h2 className="text-lg font-black leading-tight">20-Step Live Jury Presentation Flow</h2>
+              <h2 className="text-sm sm:text-lg font-black leading-tight truncate">20-Step Live Jury Presentation Flow</h2>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-full hover:bg-white/10 text-slate-400 hover:text-white transition"
+            className="p-1.5 sm:p-2 rounded-full hover:bg-white/10 text-slate-400 hover:text-white transition flex-shrink-0 ml-2"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Current Active Step Banner */}
-        <div className="p-4 bg-brand-50 border-b border-brand-100 flex items-center justify-between">
-          <div>
-            <span className="text-xs font-bold text-brand-800 uppercase tracking-wider">
+        <div className="p-3 sm:p-4 bg-brand-50 border-b border-brand-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 sm:gap-3">
+          <div className="min-w-0">
+            <span className="text-[11px] sm:text-xs font-bold text-brand-800 uppercase tracking-wider block">
               Step {currentStepData.step} of 20: {currentStepData.title}
             </span>
-            <p className="text-sm font-medium text-slate-700 mt-0.5">
+            <p className="text-xs sm:text-sm font-medium text-slate-700 mt-0.5">
               {currentStepData.desc}
             </p>
           </div>
           <button
             onClick={() => handleExecuteStep(currentStepData)}
-            className="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-xs font-black rounded-xl shadow-md flex items-center gap-1.5 transition flex-shrink-0 ml-3"
+            className="w-full sm:w-auto px-3.5 sm:px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-xs font-black rounded-xl shadow-md flex items-center justify-center gap-1.5 transition flex-shrink-0 touch-manipulation active:scale-95"
           >
             <span>Jump to Step</span>
             <Play className="w-3.5 h-3.5 fill-current" />

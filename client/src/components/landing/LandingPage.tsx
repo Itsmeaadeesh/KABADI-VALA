@@ -81,10 +81,10 @@ export const LandingPage: React.FC = () => {
               </div>
 
               {/* Primary CTAs */}
-              <div className="flex flex-wrap items-center gap-3 pt-1">
+              <div className="flex flex-col xs:flex-row items-stretch xs:items-center gap-2.5 sm:gap-3 pt-1">
                 <button
                   onClick={() => navigate('/sell')}
-                  className="px-7 py-3.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm tracking-wide shadow-lg shadow-emerald-700/20 flex items-center gap-2 active:scale-95 transition-all"
+                  className="w-full xs:w-auto px-6 sm:px-7 py-3.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm tracking-wide shadow-lg shadow-emerald-700/20 flex items-center justify-center gap-2 active:scale-95 transition-all touch-manipulation"
                 >
                   <span>Start Selling E-Waste</span>
                   <ChevronRight className="w-4 h-4 stroke-[3]" />
@@ -92,7 +92,7 @@ export const LandingPage: React.FC = () => {
 
                 <button
                   onClick={() => navigate('/recyclers')}
-                  className="px-7 py-3.5 rounded-full bg-white hover:bg-slate-50 text-slate-800 font-bold text-sm border-2 border-slate-200 shadow-xs active:scale-95 transition-all"
+                  className="w-full xs:w-auto px-6 sm:px-7 py-3.5 rounded-full bg-white hover:bg-slate-50 text-slate-800 font-bold text-sm border-2 border-slate-200 shadow-xs active:scale-95 transition-all touch-manipulation text-center"
                 >
                   Find Authorized Recycler
                 </button>

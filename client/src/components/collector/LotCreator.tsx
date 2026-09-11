@@ -159,30 +159,31 @@ export const LotCreator: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-20 max-w-3xl mx-auto px-4 sm:px-6 sm:border-x sm:border-slate-200">
+    <div className="min-h-screen bg-slate-50 pb-28 sm:pb-20 pb-safe max-w-3xl mx-auto px-3 sm:px-6 sm:border-x sm:border-slate-200">
       {/* Top Header */}
-      <div className="bg-white border-b border-slate-200 p-4 sticky top-14 z-30 flex items-center justify-between rounded-b-2xl shadow-xs">
-        <div className="flex items-center gap-3">
+      <div className="bg-white border-b border-slate-200 p-3 sm:p-4 sticky top-14 z-30 flex items-center justify-between rounded-b-2xl shadow-xs">
+        <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
           <button
             onClick={() => (step > 1 ? setStep((s) => (s - 1) as any) : navigate('/collector'))}
-            className="p-2 rounded-xl hover:bg-slate-100 text-slate-600 transition"
+            className="p-2 rounded-xl hover:bg-slate-100 text-slate-600 transition flex-shrink-0 touch-manipulation active:scale-95"
+            aria-label="Previous step"
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
-          <div>
-            <h2 className="text-lg font-black text-slate-900 leading-tight">
+          <div className="min-w-0">
+            <h2 className="text-base sm:text-lg font-black text-slate-900 leading-tight truncate">
               {t('create_lot_title')}
             </h2>
-            <div className="flex items-center gap-1.5 mt-0.5">
-              <span className={`text-[11px] font-bold ${step === 1 ? 'text-brand-700' : 'text-slate-400'}`}>
+            <div className="flex items-center gap-1 sm:gap-1.5 mt-0.5 text-[10px] sm:text-[11px] truncate">
+              <span className={`font-bold ${step === 1 ? 'text-brand-700' : 'text-slate-400'}`}>
                 {t('step_1_photo')}
               </span>
               <span className="text-slate-300">•</span>
-              <span className={`text-[11px] font-bold ${step === 2 ? 'text-brand-700' : 'text-slate-400'}`}>
+              <span className={`font-bold ${step === 2 ? 'text-brand-700' : 'text-slate-400'}`}>
                 {t('step_2_category')}
               </span>
               <span className="text-slate-300">•</span>
-              <span className={`text-[11px] font-bold ${step === 3 ? 'text-brand-700' : 'text-slate-400'}`}>
+              <span className={`font-bold ${step === 3 ? 'text-brand-700' : 'text-slate-400'}`}>
                 {t('step_3_weight')}
               </span>
             </div>
@@ -414,28 +415,28 @@ export const LotCreator: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setWeight((w) => Math.max(0.5, Math.round((w - 5) * 10) / 10))}
-                className="py-3 bg-slate-100 hover:bg-slate-200 active:scale-95 rounded-2xl font-black text-sm text-slate-800 transition"
+                className="py-3.5 min-h-[48px] bg-slate-100 hover:bg-slate-200 active:scale-95 rounded-2xl font-black text-sm sm:text-base text-slate-800 transition touch-manipulation flex items-center justify-center"
               >
                 -5 KG
               </button>
               <button
                 type="button"
                 onClick={() => setWeight((w) => Math.max(0.5, Math.round((w - 1) * 10) / 10))}
-                className="py-3 bg-slate-100 hover:bg-slate-200 active:scale-95 rounded-2xl font-black text-sm text-slate-800 transition"
+                className="py-3.5 min-h-[48px] bg-slate-100 hover:bg-slate-200 active:scale-95 rounded-2xl font-black text-sm sm:text-base text-slate-800 transition touch-manipulation flex items-center justify-center"
               >
                 -1 KG
               </button>
               <button
                 type="button"
                 onClick={() => setWeight((w) => Math.round((w + 1) * 10) / 10)}
-                className="py-3 bg-slate-100 hover:bg-slate-200 active:scale-95 rounded-2xl font-black text-sm text-slate-800 transition"
+                className="py-3.5 min-h-[48px] bg-slate-100 hover:bg-slate-200 active:scale-95 rounded-2xl font-black text-sm sm:text-base text-slate-800 transition touch-manipulation flex items-center justify-center"
               >
                 +1 KG
               </button>
               <button
                 type="button"
                 onClick={() => setWeight((w) => Math.round((w + 5) * 10) / 10)}
-                className="py-3 bg-brand-100 hover:bg-brand-200 text-brand-900 active:scale-95 rounded-2xl font-black text-sm transition"
+                className="py-3.5 min-h-[48px] bg-brand-100 hover:bg-brand-200 text-brand-900 active:scale-95 rounded-2xl font-black text-sm sm:text-base transition touch-manipulation flex items-center justify-center"
               >
                 +5 KG
               </button>
