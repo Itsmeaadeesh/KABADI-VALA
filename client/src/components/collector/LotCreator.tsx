@@ -225,11 +225,19 @@ export const LotCreator: React.FC = () => {
 
             {/* AI Classification Card */}
             <div className="bg-brand-50 border-2 border-brand-300 rounded-2xl p-3.5 text-left mb-3">
-              <div className="flex items-center justify-between mb-1">
-                <span className="inline-flex items-center gap-1 text-[11px] font-black uppercase text-brand-800 bg-white px-2 py-0.5 rounded-full border border-brand-200">
-                  <Sparkles className="w-3 h-3 text-brand-600 fill-current" />
-                  {t('ai_classification')}
-                </span>
+              <div className="flex items-center justify-between mb-1.5 flex-wrap gap-1">
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <span className="inline-flex items-center gap-1 text-[11px] font-black uppercase text-brand-800 bg-white px-2 py-0.5 rounded-full border border-brand-200">
+                    <Sparkles className="w-3 h-3 text-brand-600 fill-current" />
+                    {t('ai_classification')}
+                  </span>
+                  {aiResult.isGeminiVerified && (
+                    <span className="inline-flex items-center gap-1 text-[10px] font-black text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full border border-emerald-200 animate-pulse">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                      Gemini 3.6 Flash Vision
+                    </span>
+                  )}
+                </div>
                 <span className="text-xs font-black text-brand-700 bg-brand-100 px-2 py-0.5 rounded-full">
                   {Math.round(aiResult.confidence * 100)}% {t('confidence')}
                 </span>
