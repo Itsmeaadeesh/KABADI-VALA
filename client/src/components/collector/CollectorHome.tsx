@@ -44,7 +44,7 @@ export const CollectorHome: React.FC = () => {
     : `Welcome ${user.name} to Kabadiwala Connect. Tap the button below to start selling e-waste safely.`;
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-32 sm:pb-24 pb-safe max-w-4xl mx-auto px-3.5 sm:px-6 pt-3 sm:pt-4">
+    <div className="min-h-screen bg-slate-50 pb-collector-nav max-w-lg mx-auto px-3 sm:px-4 sm:border-x sm:border-slate-200">
       {/* Top Greeting & Status Card */}
       <div className="bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 text-white p-4 sm:p-7 rounded-2xl sm:rounded-3xl shadow-lg relative overflow-hidden">
         <div className="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-5">

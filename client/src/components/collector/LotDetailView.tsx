@@ -64,7 +64,7 @@ export const LotDetailView: React.FC = () => {
   const matName = (language === 'hi' ? lot.material_name_hi : lot.material_name) || 'E-Waste Component';
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-28 sm:pb-20 pb-safe max-w-3xl mx-auto px-3 sm:px-6 sm:border-x sm:border-slate-200">
+    <div className="min-h-screen bg-slate-50 pb-36 sm:pb-24 pb-safe max-w-3xl mx-auto px-3 sm:px-6 sm:border-x sm:border-slate-200">
       {/* Header */}
       <div className="bg-white border-b border-slate-200 p-3 sm:p-4 sticky top-14 z-30 flex items-center justify-between rounded-b-2xl shadow-xs">
         <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">

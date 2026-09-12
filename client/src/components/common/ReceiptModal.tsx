@@ -28,7 +28,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({ receiptData, onClose
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/80 backdrop-blur-sm animate-fade-in print:p-0 print:bg-white overflow-y-auto">
-      <div className="bg-white rounded-3xl max-w-md w-full p-4 sm:p-6 shadow-2xl border border-slate-200 relative animate-scale-up print:shadow-none print:border-none print:w-full max-h-[92vh] overflow-y-auto my-auto">
+      <div className="bg-white rounded-3xl max-w-md w-full p-4 sm:p-6 pb-8 shadow-2xl border border-slate-200 relative animate-scale-up print:shadow-none print:border-none print:w-full max-h-[90vh] overflow-y-auto my-auto">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 p-2 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition print:hidden"

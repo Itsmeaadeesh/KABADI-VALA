@@ -18,7 +18,7 @@ export const CollectorBottomNav: React.FC = () => {
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-lg md:hidden pb-[env(safe-area-inset-bottom,0px)]">
-      <div className="grid grid-cols-5 h-15 max-w-lg mx-auto">
+      <div className="grid grid-cols-5 h-16 max-w-lg mx-auto items-center">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive =

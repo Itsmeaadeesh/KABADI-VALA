@@ -78,8 +78,8 @@ export const RecyclerLayout: React.FC = () => {
         </nav>
       </aside>
 
-      {/* Main Content Area */}
-      <main className="flex-1 min-w-0 p-3 sm:p-5 md:p-8 max-w-7xl mx-auto w-full">
+      {/* Main Content Area with generous mobile bottom clearance */}
+      <main className="flex-1 min-w-0 p-3 sm:p-5 md:p-8 max-w-7xl mx-auto w-full pb-28 md:pb-12 pb-safe">
         <Outlet />
       </main>
     </div>

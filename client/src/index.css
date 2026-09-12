@@ -44,7 +44,18 @@
 
 /* Safe area padding utilities */
 .pb-safe {
-  padding-bottom: env(safe-area-inset-bottom, 1rem);
+  padding-bottom: max(2.5rem, calc(2rem + env(safe-area-inset-bottom, 0px)));
+}
+
+/* Dedicated clearance for screens with fixed mobile bottom navigation */
+.pb-collector-nav {
+  padding-bottom: calc(7rem + env(safe-area-inset-bottom, 1rem)) !important;
+}
+
+@media (min-width: 768px) {
+  .pb-collector-nav {
+    padding-bottom: 3rem !important;
+  }
 }
 
 .pt-safe {

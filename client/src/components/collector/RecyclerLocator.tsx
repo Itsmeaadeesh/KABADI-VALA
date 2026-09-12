@@ -81,7 +81,7 @@ export const RecyclerLocator: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-32 sm:pb-24 pb-safe max-w-5xl mx-auto px-3 sm:px-6 sm:border-x sm:border-slate-200">
+    <div className="min-h-screen bg-slate-50 pb-collector-nav max-w-5xl mx-auto px-3 sm:px-6 sm:border-x sm:border-slate-200">
       {/* Top Header */}
       <div className="bg-white border-b border-slate-200 p-3 sm:p-4 sticky top-14 z-30 flex items-center justify-between rounded-b-2xl shadow-xs">
         <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
@@ -294,8 +294,8 @@ export const RecyclerLocator: React.FC = () => {
 
       {/* Pickup Request Modal */}
       {selectedFacilityForPickup && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm animate-fade-in">
-          <div className="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 relative animate-scale-up">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/80 backdrop-blur-sm animate-fade-in overflow-y-auto">
+          <div className="bg-white rounded-3xl max-w-sm w-full p-5 sm:p-6 pb-8 shadow-2xl border border-slate-200 relative animate-scale-up max-h-[90vh] overflow-y-auto my-auto">
             <button
               onClick={() => setSelectedFacilityForPickup(null)}
               className="absolute top-4 right-4 p-2 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-700"
