@@ -93,7 +93,7 @@ export const PriceBoard: React.FC = () => {
               {t('price_board_title')}
             </h2>
             <p className="text-[10px] sm:text-xs text-slate-500 font-medium truncate">
-              Ministry of Mines benchmark rates
+              {t('price_board_sub')}
             </p>
           </div>
         </div>
@@ -102,6 +102,8 @@ export const PriceBoard: React.FC = () => {
           textToSpeak={
             language === 'hi'
               ? 'तांबे की केबल ₹520 प्रति किलो और हाई ग्रेड पीसीबी ₹410 प्रति किलो चल रही है।'
+              : language === 'mr'
+              ? 'तांब्याची केबल ₹520 प्रति किलो आणि हाय ग्रेड पीसीबी ₹410 प्रति किलो सुरू आहे.'
               : 'Copper cable is trading at ₹520/kg and high grade PCB is trading at ₹410/kg.'
           }
           size="sm"
@@ -114,7 +116,7 @@ export const PriceBoard: React.FC = () => {
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-black text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5 text-brand-600 fill-current" />
-              <span>Historical Trend</span>
+              <span>{t('historical_trend')}</span>
             </span>
 
             {/* 7d vs 30d toggle */}
@@ -141,10 +143,10 @@ export const PriceBoard: React.FC = () => {
           {/* Material Selectors for Chart */}
           <div className="flex gap-1.5 overflow-x-auto pb-2 mb-2 no-scrollbar">
             {[
-              { code: 'PCB', label: 'Motherboard', color: '#16a34a' },
-              { code: 'CABLE_CU', label: 'Copper Cable', color: '#ea580c' },
-              { code: 'BAT_LI', label: 'Li-ion Battery', color: '#9333ea' },
-              { code: 'MOTORS', label: 'Motors', color: '#0284c7' }
+              { code: 'PCB', label: language === 'hi' ? 'सर्किट बोर्ड' : language === 'mr' ? 'सर्किट बोर्ड' : 'Motherboard', color: '#16a34a' },
+              { code: 'CABLE_CU', label: language === 'hi' ? 'तांबा केबल' : language === 'mr' ? 'तांबे केबल' : 'Copper Cable', color: '#ea580c' },
+              { code: 'BAT_LI', label: language === 'hi' ? 'लिथियम बैटरी' : language === 'mr' ? 'लिथियम बॅटरी' : 'Li-ion Battery', color: '#9333ea' },
+              { code: 'MOTORS', label: language === 'hi' ? 'मोटर्स' : language === 'mr' ? 'मोटर्स' : 'Motors', color: '#0284c7' }
             ].map((item) => (
               <button
                 key={item.code}

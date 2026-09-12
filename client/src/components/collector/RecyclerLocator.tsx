@@ -60,7 +60,6 @@ export const RecyclerLocator: React.FC = () => {
   const handleRequestPickup = async () => {
     if (!selectedFacilityForPickup) return;
     try {
-      // Find a pending lot or use demo lot
       await ApiService.requestPickup({
         lotId: 'lot-demo-2',
         collectorId: 'col-ramesh-1',
@@ -76,7 +75,7 @@ export const RecyclerLocator: React.FC = () => {
       }, 2000);
     } catch (e) {
       console.error(e);
-      alert('Pickup request submitted for demo lot!');
+      alert(language === 'hi' ? 'डेमो पिकअप अनुरोध दर्ज हुआ!' : language === 'mr' ? 'डेमो पिकअप विनंती नोंदवली!' : 'Pickup request submitted for demo lot!');
       setSelectedFacilityForPickup(null);
     }
   };
@@ -98,13 +97,17 @@ export const RecyclerLocator: React.FC = () => {
               {t('locator_title')}
             </h2>
             <p className="text-[10px] sm:text-xs text-slate-500 font-medium truncate">
-              CPCB / SPCB Authorized Facilities (Demo)
+              {language === 'hi'
+                ? 'CPCB / राज्य प्रदूषण नियंत्रण बोर्ड प्रमाणित केंद्र'
+                : language === 'mr'
+                ? 'CPCB / राज्य प्रदूषण नियंत्रण मंडळ मान्यताप्राप्त केंद्र'
+                : 'CPCB / SPCB Authorized Facilities (Demo)'}
             </p>
           </div>
         </div>
 
         <span className="px-2 sm:px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[11px] sm:text-xs font-bold flex-shrink-0">
-          {recyclers.length} Facilities
+          {recyclers.length} {language === 'hi' ? 'केंद्र' : language === 'mr' ? 'केंद्रे' : 'Facilities'}
         </span>
       </div>
 
@@ -116,7 +119,7 @@ export const RecyclerLocator: React.FC = () => {
             { label: '5 KM', val: 5 },
             { label: '10 KM', val: 10 },
             { label: '25 KM', val: 25 },
-            { label: 'All', val: 100 }
+            { label: language === 'hi' ? 'सभी' : language === 'mr' ? 'सर्व' : 'All', val: 100 }
           ].map((f) => (
             <button
               key={f.val}
@@ -141,7 +144,7 @@ export const RecyclerLocator: React.FC = () => {
             }`}
           >
             <List className="w-3.5 h-3.5" />
-            <span className="hidden xs:inline">List</span>
+            <span className="hidden xs:inline">{t('list_view')}</span>
           </button>
           <button
             onClick={() => setViewMode('map')}
@@ -150,12 +153,12 @@ export const RecyclerLocator: React.FC = () => {
             }`}
           >
             <MapIcon className="w-3.5 h-3.5" />
-            <span className="hidden xs:inline">Map</span>
+            <span className="hidden xs:inline">{t('interactive_map')}</span>
           </button>
         </div>
       </div>
 
-      {/* Interactive Leaflet Map (Shown when viewMode === 'map' or on larger screens) */}
+      {/* Interactive Leaflet Map (Shown when viewMode === 'map') */}
       {viewMode === 'map' && (
         <div className="h-64 sm:h-72 w-full bg-slate-200 relative border-b border-slate-200 animate-fade-in">
           <MapContainer
@@ -185,9 +188,6 @@ export const RecyclerLocator: React.FC = () => {
               </Marker>
             ))}
           </MapContainer>
-          <div className="absolute bottom-2 right-2 z-[400] bg-white/90 backdrop-blur-xs px-2 py-0.5 rounded text-[10px] font-bold text-slate-600 shadow-xs">
-            OpenStreetMap
-          </div>
         </div>
       )}
 
@@ -198,7 +198,7 @@ export const RecyclerLocator: React.FC = () => {
             key={r.id}
             className={`bg-white rounded-3xl p-4 border transition shadow-xs ${
               r.isBestMatch
-                ? 'border-2 border-brand-500 ring-2 ring-brand-200 shadow-brand-500/10'
+                ? 'border-2 border-emerald-500 ring-2 ring-emerald-200 shadow-emerald-500/10'
                 : 'border-slate-200'
             }`}
           >
@@ -206,7 +206,7 @@ export const RecyclerLocator: React.FC = () => {
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-1.5">
                 {r.isBestMatch && (
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-brand-600 text-white uppercase tracking-wider">
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-600 text-white uppercase tracking-wider">
                     <Award className="w-3 h-3 fill-current" />
                     {t('best_match')}
                   </span>
@@ -234,27 +234,39 @@ export const RecyclerLocator: React.FC = () => {
             {/* Price Teasers */}
             <div className="bg-slate-50 p-2.5 rounded-2xl border border-slate-100 my-2.5 flex items-center justify-between text-xs">
               <div>
-                <span className="text-slate-400 block text-[10px] uppercase font-bold">PCB Buy Rate</span>
-                <span className="font-black text-brand-700 text-sm">₹425/kg</span>
+                <span className="text-slate-400 block text-[10px] uppercase font-bold">
+                  {language === 'hi' ? 'सर्किट बोर्ड भाव' : language === 'mr' ? 'सर्किट बोर्ड दर' : 'PCB Buy Rate'}
+                </span>
+                <span className="font-black text-emerald-700 text-sm">₹425/kg</span>
               </div>
               <div>
-                <span className="text-slate-400 block text-[10px] uppercase font-bold">Copper Cable</span>
-                <span className="font-black text-brand-700 text-sm">₹535/kg</span>
+                <span className="text-slate-400 block text-[10px] uppercase font-bold">
+                  {language === 'hi' ? 'तांबा केबल भाव' : language === 'mr' ? 'तांबे केबल दर' : 'Copper Cable'}
+                </span>
+                <span className="font-black text-emerald-700 text-sm">₹535/kg</span>
               </div>
               <div className="text-right">
-                <span className="text-slate-400 block text-[10px] uppercase font-bold">Distance</span>
-                <span className="font-bold text-slate-800 text-xs">{r.distanceKm} km away</span>
+                <span className="text-slate-400 block text-[10px] uppercase font-bold">
+                  {language === 'hi' ? 'दूरी' : language === 'mr' ? 'अंतर' : 'Distance'}
+                </span>
+                <span className="font-bold text-slate-800 text-xs">
+                  {r.distanceKm} {language === 'hi' ? 'किमी दूर' : language === 'mr' ? 'किमी लांब' : 'km away'}
+                </span>
               </div>
             </div>
 
             {/* Logistics info */}
             <div className="flex items-center justify-between text-xs text-slate-600 mb-3">
-              <span className="flex items-center gap-1.5 text-brand-700 font-bold text-[11px]">
+              <span className="flex items-center gap-1.5 text-emerald-700 font-bold text-[11px]">
                 <Truck className="w-3.5 h-3.5" />
-                <span>{r.pickup_available ? 'Free Doorstep Pickup' : 'Self-delivery only'}</span>
+                <span>
+                  {r.pickup_available
+                    ? (language === 'hi' ? 'मुफ्त घर से पिकअप' : language === 'mr' ? 'मोफत घरपोच पिकअप' : 'Free Doorstep Pickup')
+                    : (language === 'hi' ? 'स्वयं डिलीवरी' : language === 'mr' ? 'स्वतः डिलिव्हरी' : 'Self-delivery only')}
+                </span>
               </span>
               <span className="text-[11px] text-slate-400">
-                Radius: {r.service_radius} KM
+                {language === 'hi' ? 'दायरा' : language === 'mr' ? 'कक्षा' : 'Radius'}: {r.service_radius} KM
               </span>
             </div>
 
@@ -262,7 +274,7 @@ export const RecyclerLocator: React.FC = () => {
             <div className="grid grid-cols-2 gap-2 pt-1">
               <button
                 onClick={() => setSelectedFacilityForPickup(r)}
-                className="py-2.5 px-3 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-black shadow-md shadow-brand-600/10 flex items-center justify-center gap-1.5 transition active:scale-95"
+                className="py-2.5 px-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-black shadow-md shadow-emerald-600/10 flex items-center justify-center gap-1.5 transition active:scale-95"
               >
                 <Truck className="w-3.5 h-3.5" />
                 <span>{t('request_pickup')}</span>
@@ -293,28 +305,34 @@ export const RecyclerLocator: React.FC = () => {
 
             {pickupSuccess ? (
               <div className="py-8 text-center">
-                <CheckCircle2 className="w-16 h-16 text-brand-600 mx-auto mb-3 animate-bounce" />
-                <h3 className="text-xl font-black text-slate-900">Pickup Scheduled!</h3>
+                <CheckCircle2 className="w-16 h-16 text-emerald-600 mx-auto mb-3 animate-bounce" />
+                <h3 className="text-xl font-black text-slate-900">
+                  {language === 'hi' ? 'पिकअप शेड्यूल हो गया!' : language === 'mr' ? 'पिकअप निश्चित झाले!' : 'Pickup Scheduled!'}
+                </h3>
                 <p className="text-xs text-slate-500 mt-1">
-                  GreenCycle driver will arrive on {pickupDate} ({pickupSlot}).
+                  {language === 'hi'
+                    ? `वाहन ${pickupDate} (${pickupSlot}) को आपके पते पर पहुंचेगा।`
+                    : language === 'mr'
+                    ? `गाडी ${pickupDate} (${pickupSlot}) रोजी आपल्या पत्त्यावर पोहोचेल.`
+                    : `Driver will arrive on ${pickupDate} (${pickupSlot}).`}
                 </p>
               </div>
             ) : (
               <>
-                <div className="w-12 h-12 bg-brand-100 text-brand-700 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                <div className="w-12 h-12 bg-emerald-100 text-emerald-700 rounded-2xl flex items-center justify-center mx-auto mb-3">
                   <Truck className="w-7 h-7" />
                 </div>
                 <h3 className="text-lg font-black text-slate-900 text-center mb-1">
-                  Request Doorstep Pickup
+                  {t('request_pickup')}
                 </h3>
-                <p className="text-xs text-slate-500 text-center mb-4">
+                <p className="text-xs text-slate-500 text-center mb-4 truncate">
                   {selectedFacilityForPickup.facility_name}
                 </p>
 
                 <div className="space-y-3 text-left">
                   <div>
                     <label className="text-xs font-bold text-slate-700 block mb-1">
-                      Preferred Date
+                      {language === 'hi' ? 'पसंदीदा तारीख' : language === 'mr' ? 'पसंतीची तारीख' : 'Preferred Date'}
                     </label>
                     <input
                       type="date"
@@ -326,32 +344,38 @@ export const RecyclerLocator: React.FC = () => {
 
                   <div>
                     <label className="text-xs font-bold text-slate-700 block mb-1">
-                      Time Window
+                      {language === 'hi' ? 'समय विंडो' : language === 'mr' ? 'वेळ' : 'Time Window'}
                     </label>
                     <select
                       value={pickupSlot}
                       onChange={(e) => setPickupSlot(e.target.value)}
                       className="w-full p-2.5 border border-slate-300 rounded-xl text-xs font-bold"
                     >
-                      <option>Morning (10 AM - 1 PM)</option>
-                      <option>Afternoon (2 PM - 5 PM)</option>
-                      <option>Evening (5 PM - 8 PM)</option>
+                      <option>{language === 'hi' ? 'सुबह (10 AM - 1 PM)' : language === 'mr' ? 'सकाळी (10 AM - 1 PM)' : 'Morning (10 AM - 1 PM)'}</option>
+                      <option>{language === 'hi' ? 'दोपहर (2 PM - 5 PM)' : language === 'mr' ? 'दुपारी (2 PM - 5 PM)' : 'Afternoon (2 PM - 5 PM)'}</option>
+                      <option>{language === 'hi' ? 'शाम (5 PM - 8 PM)' : language === 'mr' ? 'संध्याकाळी (5 PM - 8 PM)' : 'Evening (5 PM - 8 PM)'}</option>
                     </select>
                   </div>
 
-                  <div className="bg-brand-50 p-3 rounded-2xl border border-brand-200 text-xs text-brand-900">
+                  <div className="bg-emerald-50 p-3 rounded-2xl border border-emerald-200 text-xs text-emerald-950">
                     <span className="font-bold flex items-center gap-1.5 mb-0.5">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-brand-700" />
-                      Guaranteed Rate Lock
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-700" />
+                      {language === 'hi' ? '48 घंटे भाव गारंटी' : language === 'mr' ? '४८ तास दर हमी' : 'Guaranteed Rate Lock'}
                     </span>
-                    <span>Rates locked for 48 hours until physical scale verification.</span>
+                    <span>
+                      {language === 'hi'
+                        ? 'कांटे पर तौलने तक भाव 48 घंटे के लिए सुरक्षित रहेगा।'
+                        : language === 'mr'
+                        ? 'काट्यावर वजन होईपर्यंत दर ४८ तासांसाठी सुरक्षित राहील.'
+                        : 'Rates locked for 48 hours until physical scale verification.'}
+                    </span>
                   </div>
 
                   <button
                     onClick={handleRequestPickup}
-                    className="w-full py-3.5 bg-brand-600 hover:bg-brand-700 text-white font-black rounded-xl shadow-lg shadow-brand-600/20 text-xs transition"
+                    className="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-xl shadow-lg shadow-emerald-600/20 text-xs transition active:scale-95"
                   >
-                    Confirm Pickup Request
+                    {language === 'hi' ? 'पिकअप की पुष्टि करें' : language === 'mr' ? 'पिकअप निश्चित करा' : 'Confirm Pickup Request'}
                   </button>
                 </div>
               </>

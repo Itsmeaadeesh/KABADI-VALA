@@ -216,8 +216,8 @@ export const LotCreator: React.FC = () => {
               {analyzingAi && (
                 <div className="absolute inset-0 bg-slate-950/75 flex flex-col items-center justify-center text-white backdrop-blur-sm">
                   <div className="w-10 h-10 border-4 border-brand-500 border-t-transparent rounded-full animate-spin mb-2" />
-                  <span className="text-xs font-bold text-brand-300">
-                    AI Scanning Component...
+                  <span className="text-xs font-bold text-emerald-300">
+                    {language === 'hi' ? 'AI कंपोनेंट स्कैन कर रहा है...' : language === 'mr' ? 'AI घटक स्कॅन करत आहे...' : 'AI Scanning Component...'}
                   </span>
                 </div>
               )}
@@ -515,7 +515,7 @@ export const LotCreator: React.FC = () => {
             </div>
 
             <p className="text-xs text-brand-200/90 font-medium">
-              {weight} KG × ₹{estimatedRate}/KG ({condition === 'INTACT' ? '+5% Intact Bonus' : 'Standard Rate'})
+              {weight} KG × ₹{estimatedRate}/KG ({condition === 'INTACT' ? (language === 'hi' ? '+५% साबुत बोनस' : language === 'mr' ? '+५% न तुटल्यास बोनस' : '+5% Intact Bonus') : (language === 'hi' ? 'मानक दर' : language === 'mr' ? 'प्रमाणित दर' : 'Standard Rate')})
             </p>
 
             {/* Strategic Critical Mineral Warning */}

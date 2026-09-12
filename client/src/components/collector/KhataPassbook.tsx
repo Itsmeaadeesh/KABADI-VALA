@@ -44,6 +44,8 @@ export const KhataPassbook: React.FC = () => {
 
   const speechPhrase = language === 'hi'
     ? `मेरा खाता: इस महीने की कुल कमाई ₹${summary.thisMonthEarnings.toLocaleString('en-IN')} है, और ₹${summary.pendingAmount.toLocaleString('en-IN')} सत्यापन में बाकी है।`
+    : language === 'mr'
+    ? `माझे खाते: या महिन्याची एकूण कमाई ₹${summary.thisMonthEarnings.toLocaleString('en-IN')} आहे, आणि ₹${summary.pendingAmount.toLocaleString('en-IN')} पडताळणीत शिल्लक आहे.`
     : `Mera Khata: Total earnings this month is ₹${summary.thisMonthEarnings.toLocaleString('en-IN')}, with ₹${summary.pendingAmount.toLocaleString('en-IN')} pending verification.`;
 
   return (
@@ -63,7 +65,7 @@ export const KhataPassbook: React.FC = () => {
               {t('khata_title')}
             </h2>
             <p className="text-[10px] sm:text-xs text-slate-500 font-medium truncate">
-              Verifiable digital earnings & passbook
+              {t('card_khata_sub')}
             </p>
           </div>
         </div>
@@ -80,7 +82,7 @@ export const KhataPassbook: React.FC = () => {
             </span>
             <span className="text-[9px] sm:text-[10px] bg-emerald-400 text-slate-950 px-2 sm:px-2.5 py-0.5 rounded-full font-black flex items-center gap-1">
               <CheckCircle2 className="w-3 h-3 text-slate-950" />
-              <span>Verified Bank Sync</span>
+              <span>{t('verified_bank_sync')}</span>
             </span>
           </div>
 
@@ -88,25 +90,25 @@ export const KhataPassbook: React.FC = () => {
             ₹{summary.thisMonthEarnings.toLocaleString('en-IN')}
           </div>
           <p className="text-[11px] sm:text-xs text-slate-300 font-medium">
-            Recorded through authorized recycling manifests
+            {t('recorded_manifests')}
           </p>
 
           {/* Quick Metrics Grid */}
           <div className="grid grid-cols-3 gap-2 mt-3 sm:mt-4 pt-3 border-t border-white/10 text-center">
             <div className="bg-white/5 p-2 rounded-xl sm:rounded-2xl">
-              <span className="text-[9px] sm:text-[10px] text-purple-200 block uppercase font-bold">Pending</span>
+              <span className="text-[9px] sm:text-[10px] text-purple-200 block uppercase font-bold">{t('pending_earnings')}</span>
               <span className="text-xs sm:text-sm font-black text-amber-400">
                 ₹{summary.pendingAmount.toLocaleString('en-IN')}
               </span>
             </div>
             <div className="bg-white/5 p-2 rounded-xl sm:rounded-2xl">
-              <span className="text-[9px] sm:text-[10px] text-purple-200 block uppercase font-bold">Completed</span>
+              <span className="text-[9px] sm:text-[10px] text-purple-200 block uppercase font-bold">{t('completed_lots_count')}</span>
               <span className="text-xs sm:text-sm font-black text-emerald-400">
                 {summary.completedLotsCount}
               </span>
             </div>
             <div className="bg-white/5 p-2 rounded-xl sm:rounded-2xl">
-              <span className="text-[9px] sm:text-[10px] text-purple-200 block uppercase font-bold">In Transit</span>
+              <span className="text-[9px] sm:text-[10px] text-purple-200 block uppercase font-bold">{t('in_transit_count')}</span>
               <span className="text-xs sm:text-sm font-black text-blue-400">
                 {summary.inTransitCount}
               </span>
@@ -131,7 +133,7 @@ export const KhataPassbook: React.FC = () => {
 
           {transactions.length === 0 ? (
             <div className="p-4 bg-white rounded-2xl text-center text-xs text-slate-400">
-              No completed transactions yet.
+              {t('no_lots_title')}
             </div>
           ) : (
             transactions.map((txn) => (
@@ -145,12 +147,12 @@ export const KhataPassbook: React.FC = () => {
                   </div>
                   <div>
                     <h4 className="text-sm font-black text-slate-900 leading-snug">
-                      {language === 'hi' ? txn.material_name_hi : txn.material_name || 'E-Waste'}
+                      {language === 'hi' || language === 'mr' ? txn.material_name_hi || txn.material_name : txn.material_name || 'E-Waste'}
                     </h4>
                     <p className="text-[11px] text-slate-500 font-medium">
                       {txn.recycler_facility_name || 'Authorized Recycler'} • {txn.weight ? `${txn.weight} KG` : '12.2 KG'}
                     </p>
-                    <span className="font-mono text-[10px] text-brand-700 font-bold block mt-0.5">
+                    <span className="font-mono text-[10px] text-emerald-700 font-bold block mt-0.5">
                       Ref: {txn.reference_id}
                     </span>
                   </div>
@@ -161,7 +163,7 @@ export const KhataPassbook: React.FC = () => {
                     +₹{txn.amount.toLocaleString('en-IN')}
                   </span>
                   <span className="text-[10px] font-bold text-slate-400">
-                    {new Date(txn.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
+                    {new Date(txn.created_at).toLocaleDateString(language === 'hi' ? 'hi-IN' : language === 'mr' ? 'mr-IN' : 'en-IN', { day: 'numeric', month: 'short' })}
                   </span>
                 </div>
               </div>
@@ -182,39 +184,43 @@ export const KhataPassbook: React.FC = () => {
             </button>
 
             <div className="text-center pb-3 border-b border-slate-200">
-              <span className="text-[10px] font-bold text-brand-700 uppercase tracking-widest bg-brand-50 px-2.5 py-0.5 rounded-full border border-brand-200">
-                SIH #26229 • CIRCULAR ECONOMY LEDGER (DEMO)
+              <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-widest bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                SIH #26229 • {t('khata_title')}
               </span>
               <h3 className="text-lg font-black text-slate-900 mt-2">
-                Digital Earnings Record (Demo Data)
+                {language === 'hi' ? 'डिजिटल कमाई प्रमाण पत्र' : language === 'mr' ? 'डिजिटल कमाई प्रमाणपत्र' : 'Digital Earnings Record (Demo Data)'}
               </h3>
               <p className="text-xs text-slate-500 font-medium">
-                Collector: Ramesh Kumar • Phone: 9999999999
+                {language === 'hi' ? 'कलेक्टर: रमेश कुमार • फोन: 9999999999' : language === 'mr' ? 'कलेक्टर: रमेश कुमार • फोन: 9999999999' : 'Collector: Ramesh Kumar • Phone: 9999999999'}
               </p>
             </div>
 
             <div className="py-4 space-y-2 text-xs">
               <div className="bg-slate-50 p-3 rounded-2xl flex justify-between font-bold">
-                <span>Total Formalized Tonnage Diverted</span>
-                <span className="text-brand-700">0.42 Tonnes (420 KG)</span>
+                <span>{language === 'hi' ? 'कुल औपचारिक ई-कचरा' : language === 'mr' ? 'एकूण औपचारिक ई-कचरा' : 'Total Formalized Tonnage Diverted'}</span>
+                <span className="text-emerald-700">0.42 Tonnes (420 KG)</span>
               </div>
               <div className="bg-slate-50 p-3 rounded-2xl flex justify-between font-bold">
-                <span>Total Certified Transactions</span>
-                <span className="text-slate-900">17 Transactions</span>
+                <span>{language === 'hi' ? 'प्रमाणित लेन-देन' : language === 'mr' ? 'प्रमाणित व्यवहार' : 'Total Certified Transactions'}</span>
+                <span className="text-slate-900">17 {language === 'hi' ? 'लेन-देन' : language === 'mr' ? 'व्यवहार' : 'Transactions'}</span>
               </div>
-              <div className="bg-brand-50 p-3.5 rounded-2xl flex justify-between font-black text-sm text-brand-900 border border-brand-200">
-                <span>Total Earnings Deposited (UPI)</span>
+              <div className="bg-emerald-50 p-3.5 rounded-2xl flex justify-between font-black text-sm text-emerald-950 border border-emerald-200">
+                <span>{language === 'hi' ? 'कुल जमा राशि (UPI)' : language === 'mr' ? 'एकूण जमा रक्कम (UPI)' : 'Total Earnings Deposited (UPI)'}</span>
                 <span>₹{summary.thisMonthEarnings.toLocaleString('en-IN')}</span>
               </div>
               <div className="bg-emerald-50 p-3 rounded-2xl flex justify-between font-bold border border-emerald-200">
-                <span className="text-emerald-900">Estimated Loan Readiness</span>
-                <span className="text-emerald-700 font-black">Tier-2 Ready (Simulated)</span>
+                <span className="text-emerald-900">{language === 'hi' ? 'लोन पात्रता स्कोर' : language === 'mr' ? 'कर्ज पात्रता स्कोअर' : 'Estimated Loan Readiness'}</span>
+                <span className="text-emerald-700 font-black">{language === 'hi' ? 'टियर-2 उपयुक्त (सिम्युलेटेड)' : language === 'mr' ? 'टियर-2 पात्र (सिम्युलेटेड)' : 'Tier-2 Ready (Simulated)'}</span>
               </div>
             </div>
 
             <div className="pt-2 border-t border-slate-200 text-center">
               <p className="text-[11px] text-slate-500 leading-relaxed mb-4">
-                This simulated record demonstrates verifiable transaction history of secondary raw material recovery and regular earnings under Extended Producer Responsibility (EPR) guidelines for SIH Problem Statement 26229.
+                {language === 'hi'
+                  ? 'यह रिकॉर्ड खान मंत्रालय (MoM) और JNARDDC के तहत ईपीआर (EPR) दिशानिर्देशों के अनुसार द्वितीयक कच्चे माल की रिकवरी और प्रमाणित बैंक आय को प्रदर्शित करता है।'
+                  : language === 'mr'
+                  ? 'हे रेकॉर्ड खाण मंत्रालय (MoM) आणि JNARDDC अंतर्गत EPR मार्गदर्शक तत्त्वांचे पालन करून दुय्यम कच्च्या मालाची रिकव्हरी आणि प्रमाणित बँक कमाई दर्शवते.'
+                  : 'This simulated record demonstrates verifiable transaction history of secondary raw material recovery and regular earnings under Extended Producer Responsibility (EPR) guidelines for SIH Problem Statement 26229.'}
               </p>
 
               <div className="flex gap-2 print:hidden">
@@ -223,14 +229,14 @@ export const KhataPassbook: React.FC = () => {
                   className="flex-1 py-2.5 bg-slate-900 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-1.5"
                 >
                   <Printer className="w-4 h-4" />
-                  <span>Print</span>
+                  <span>{language === 'hi' ? 'प्रिंट' : language === 'mr' ? 'प्रिंट' : 'Print'}</span>
                 </button>
                 <button
                   onClick={() => window.print()}
-                  className="flex-1 py-2.5 bg-brand-600 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-1.5"
+                  className="flex-1 py-2.5 bg-emerald-600 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-1.5"
                 >
                   <Download className="w-4 h-4" />
-                  <span>Download PDF</span>
+                  <span>{language === 'hi' ? 'PDF डाउनलोड' : language === 'mr' ? 'PDF डाउनलोड' : 'Download PDF'}</span>
                 </button>
               </div>
             </div>

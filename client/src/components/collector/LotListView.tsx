@@ -32,7 +32,7 @@ export const LotListView: React.FC = () => {
         return (
           <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
             <CheckCircle2 className="w-3.5 h-3.5" />
-            <span>Verified & Paid</span>
+            <span>{t('status_verified_paid')}</span>
           </span>
         );
       case 'PICKUP_SCHEDULED':
@@ -40,21 +40,21 @@ export const LotListView: React.FC = () => {
         return (
           <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-100 text-blue-800">
             <Truck className="w-3.5 h-3.5" />
-            <span>Pickup Scheduled</span>
+            <span>{t('status_pickup_scheduled')}</span>
           </span>
         );
       case 'LOCAL_PENDING_SYNC':
         return (
           <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800 animate-pulse">
             <span className="w-2 h-2 rounded-full bg-amber-500 inline-block"></span>
-            <span>Saved Locally</span>
+            <span>{t('status_saved_locally')}</span>
           </span>
         );
       default:
         return (
           <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-100 text-slate-800">
             <Clock className="w-3.5 h-3.5" />
-            <span>New Lot</span>
+            <span>{t('status_new_lot')}</span>
           </span>
         );
     }
@@ -77,17 +77,17 @@ export const LotListView: React.FC = () => {
               {t('nav_lots')}
             </h2>
             <p className="text-[10px] sm:text-xs text-slate-500 font-medium truncate">
-              {lots.length} registered digital lots
+              {lots.length} {t('lots_registered_count')}
             </p>
           </div>
         </div>
 
         <button
           onClick={() => navigate('/sell')}
-          className="px-2.5 sm:px-3 py-1.5 sm:py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-black flex items-center gap-1 shadow-md shadow-brand-600/20 active:scale-95 transition touch-manipulation flex-shrink-0"
+          className="px-2.5 sm:px-3 py-1.5 sm:py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-black flex items-center gap-1 shadow-md shadow-emerald-600/20 active:scale-95 transition touch-manipulation flex-shrink-0"
         >
           <Plus className="w-4 h-4" />
-          <span>New Lot</span>
+          <span>{t('card_sell_title')}</span>
         </button>
       </div>
 
@@ -95,20 +95,20 @@ export const LotListView: React.FC = () => {
       <div className="p-3 sm:p-4 space-y-3">
         {loading ? (
           <div className="p-8 text-center text-slate-400 text-sm font-medium">
-            Loading lots...
+            {t('syncing')}
           </div>
         ) : lots.length === 0 ? (
           <div className="bg-white rounded-3xl p-8 text-center border border-slate-200">
             <Package className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-            <h3 className="text-base font-bold text-slate-700 mb-1">No lots created yet</h3>
+            <h3 className="text-base font-bold text-slate-700 mb-1">{t('no_lots_title')}</h3>
             <p className="text-xs text-slate-400 mb-4">
-              Take a photo of circuit boards, cables or batteries to start.
+              {t('no_lots_desc')}
             </p>
             <button
               onClick={() => navigate('/sell')}
-              className="py-3 px-6 bg-brand-600 text-white font-black rounded-xl text-xs"
+              className="py-3 px-6 bg-emerald-600 text-white font-black rounded-xl text-xs"
             >
-              Sell First Lot
+              {t('sell_first_lot')}
             </button>
           </div>
         ) : (
@@ -116,7 +116,7 @@ export const LotListView: React.FC = () => {
             <div
               key={lot.id}
               onClick={() => navigate(`/lots/${lot.id}`)}
-              className="bg-white rounded-3xl p-4 border border-slate-200 shadow-xs hover:border-brand-400 transition cursor-pointer active:scale-[0.99]"
+              className="bg-white rounded-3xl p-4 border border-slate-200 shadow-xs hover:border-emerald-400 transition cursor-pointer active:scale-[0.99]"
             >
               <div className="flex items-start justify-between mb-2">
                 <span className="font-mono text-xs font-bold text-slate-500">
@@ -133,19 +133,23 @@ export const LotListView: React.FC = () => {
                     className="w-16 h-16 rounded-2xl object-cover border border-slate-100 flex-shrink-0"
                   />
                 ) : (
-                  <div className="w-16 h-16 rounded-2xl bg-brand-50 flex items-center justify-center text-brand-600 flex-shrink-0 font-bold">
+                  <div className="w-16 h-16 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-600 flex-shrink-0 font-bold">
                     <Package className="w-8 h-8" />
                   </div>
                 )}
 
                 <div className="flex-1 overflow-hidden">
                   <h4 className="text-sm font-black text-slate-900 truncate">
-                    {language === 'hi' ? lot.material_name_hi : lot.material_name || 'E-Waste Material'}
+                    {language === 'hi'
+                      ? lot.material_name_hi || lot.material_name
+                      : language === 'mr'
+                      ? lot.material_name_hi || lot.material_name
+                      : lot.material_name || 'E-Waste Material'}
                   </h4>
                   <p className="text-xs text-slate-500 font-medium mt-0.5">
-                    Weight: <span className="font-bold text-slate-800">{lot.weight} KG</span>
+                    {t('weight_kg')}: <span className="font-bold text-slate-800">{lot.weight} KG</span>
                   </p>
-                  <div className="text-base font-black text-brand-700 mt-1">
+                  <div className="text-base font-black text-emerald-700 mt-1">
                     ₹{(lot.final_price || lot.estimated_price).toLocaleString('en-IN')}
                   </div>
                 </div>

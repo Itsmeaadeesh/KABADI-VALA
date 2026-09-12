@@ -6,12 +6,25 @@
   html {
     @apply scroll-smooth;
     -webkit-text-size-adjust: 100%;
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
   }
 
   body {
-    @apply bg-slate-50 text-slate-900 antialiased font-sans overflow-x-hidden;
+    @apply bg-slate-50 text-slate-900 antialiased font-sans;
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
+  }
+
+  #root {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+    min-height: 100vh;
   }
 
   /* Optimize touch target sizes for mobile */

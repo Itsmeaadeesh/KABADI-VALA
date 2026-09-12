@@ -59,7 +59,11 @@ export const SafetyCenter: React.FC = () => {
               {t('safety_title')}
             </h2>
             <p className="text-[10px] sm:text-xs text-slate-500 font-medium truncate">
-              Safe e-waste handling & health guidelines
+              {language === 'hi'
+                ? 'सुरक्षित ई-कचरा प्रबंधन व स्वास्थ्य नियम'
+                : language === 'mr'
+                ? 'सुरक्षित ई-कचरा हाताळणी व आरोग्य नियम'
+                : 'Safe e-waste handling & health guidelines'}
             </p>
           </div>
         </div>
@@ -68,6 +72,8 @@ export const SafetyCenter: React.FC = () => {
           textToSpeak={
             language === 'hi'
               ? 'सुरक्षा केंद्र: तेजाब और आग से दूर रहें। सुरक्षित हैंडलिंग से 5% अतिरिक्त बोनस मिलता है।'
+              : language === 'mr'
+              ? 'सुरक्षा केंद्र: अ‍ॅसिड आणि आगीपासून दूर राहा. सुरक्षित हाताळणीने ५% अतिरिक्त बोनस मिळतो.'
               : 'Safety Center: Avoid acid baths and open burning. Safe certified handling grants +5% bonus on your scrap.'
           }
           size="sm"
@@ -109,7 +115,7 @@ export const SafetyCenter: React.FC = () => {
                   <div className="flex-1">
                     <span className="text-[10px] font-black text-rose-700 bg-rose-50 px-2 py-0.5 rounded-md uppercase tracking-wider mb-1 inline-flex items-center gap-1 border border-rose-200">
                       <span className="w-1.5 h-1.5 rounded-full bg-rose-600 inline-block"></span>
-                      <span>PROHIBITED / HAZARD</span>
+                      <span>{language === 'hi' ? 'वर्जित / हानिकारक' : language === 'mr' ? 'निषिद्ध / घातक' : 'PROHIBITED / HAZARD'}</span>
                     </span>
                     <h4 className="text-sm font-black text-slate-900 leading-snug">
                       {title}
@@ -154,7 +160,7 @@ export const SafetyCenter: React.FC = () => {
                   <div className="flex-1">
                     <span className="text-[10px] font-black text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md uppercase tracking-wider mb-1 inline-flex items-center gap-1 border border-emerald-200">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 inline-block"></span>
-                      <span>RECOMMENDED (+5% BONUS)</span>
+                      <span>{language === 'hi' ? 'अनुशंसित (+५% बोनस)' : language === 'mr' ? 'शिफारस (+५% बोनस)' : 'RECOMMENDED (+5% BONUS)'}</span>
                     </span>
                     <h4 className="text-sm font-black text-slate-900 leading-snug">
                       {title}
