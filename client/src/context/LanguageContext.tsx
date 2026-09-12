@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import type { Language } from '../types/schema';
 import { translations } from '../data/translations';
 
@@ -8,17 +8,36 @@ interface LanguageContextType {
   t: (key: string) => string;
 }
 
+function safeGetStorage(key: string): string | null {
+  try {
+    return typeof window !== 'undefined' && window.localStorage ? localStorage.getItem(key) : null;
+  } catch (e) {
+    console.warn('[Storage] localStorage read failed:', e);
+    return null;
+  }
+}
+
+function safeSetStorage(key: string, value: string): void {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.setItem(key, value);
+    }
+  } catch (e) {
+    console.warn('[Storage] localStorage write failed:', e);
+  }
+}
+
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [language, setLanguageState] = useState<Language>(() => {
-    const saved = localStorage.getItem('kabadiwala_lang');
+    const saved = safeGetStorage('kabadiwala_lang');
     return (saved as Language) || 'hi'; // Default to Hindi for inclusive Bharat experience
   });
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
-    localStorage.setItem('kabadiwala_lang', lang);
+    safeSetStorage('kabadiwala_lang', lang);
   };
 
   const t = (key: string): string => {

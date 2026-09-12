@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2316a34a'><path d='M7 19h10V4H7v15zm-5-2h4V6H2v11zM18 6v11h4V6h-4z'/></svg>" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#166534" />
     <meta name="description" content="Kabadiwala Connect - Bringing the Informal E-Waste Collector into the Formal Recycling Chain (SIH 26229 / MoM / JNARDDC)" />
     <link rel="manifest" href="/manifest.json" />
@@ -12,6 +12,75 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;600;700;800&display=swap" rel="stylesheet">
     <title>Kabadiwala Connect | कबाड़ीवाला कनेक्ट</title>
+
+    <!-- PWA / Dynamic Chunk Cache Self-Healing System -->
+    <script>
+      (function() {
+        function triggerCacheBustAndReload(reason) {
+          console.warn('[PWA Self-Healing] Triggered by:', reason);
+          var key = '__pwa_reload_ts';
+          var last = sessionStorage.getItem(key);
+          var now = Date.now();
+          // Avoid infinite loops (allow at most one auto-reload per 12 seconds)
+          if (!last || (now - parseInt(last, 10)) > 12000) {
+            sessionStorage.setItem(key, now.toString());
+            if ('serviceWorker' in navigator) {
+              navigator.serviceWorker.getRegistrations().then(function(regs) {
+                regs.forEach(function(r) { r.unregister(); });
+              });
+            }
+            if ('caches' in window) {
+              caches.keys().then(function(names) {
+                names.forEach(function(n) { caches.delete(n); });
+              });
+            }
+            setTimeout(function() {
+              window.location.reload(true);
+            }, 100);
+          }
+        }
+
+        // 1. Vite chunk load failure
+        window.addEventListener('vite:preloadError', function(e) {
+          triggerCacheBustAndReload('vite:preloadError');
+        });
+
+        // 2. Module script MIME error or missing chunk script error
+        window.addEventListener('error', function(e) {
+          var msg = (e && e.message) ? e.message.toLowerCase() : '';
+          if (
+            msg.indexOf('failed to load module') !== -1 ||
+            msg.indexOf('mime type') !== -1 ||
+            msg.indexOf('loading chunk') !== -1 ||
+            msg.indexOf('dynamically imported module') !== -1 ||
+            msg.indexOf('unexpected token <') !== -1
+          ) {
+            triggerCacheBustAndReload(msg);
+          }
+        }, true);
+
+        // 3. Unhandled rejection from dynamic imports
+        window.addEventListener('unhandledrejection', function(e) {
+          var reason = (e && e.reason) ? (e.reason.message || String(e.reason)).toLowerCase() : '';
+          if (
+            reason.indexOf('failed to fetch dynamically imported module') !== -1 ||
+            reason.indexOf('loading chunk') !== -1 ||
+            reason.indexOf('mime type') !== -1
+          ) {
+            triggerCacheBustAndReload(reason);
+          }
+        });
+
+        // 4. Proactive ServiceWorker update check
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.getRegistrations().then(function(registrations) {
+            registrations.forEach(function(reg) {
+              reg.update().catch(function() {});
+            });
+          });
+        }
+      })();
+    </script>
   </head>
   <body class="bg-slate-50 text-slate-900 antialiased selection:bg-brand-500 selection:text-white">
     <div id="root"></div>

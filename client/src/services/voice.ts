@@ -11,12 +11,22 @@ export class VoiceService {
   }
 
   private static notify(isSpeaking: boolean, text: string) {
-    this.onStateChangeListeners.forEach(l => l(isSpeaking, text));
+    this.onStateChangeListeners.forEach(l => {
+      try {
+        l(isSpeaking, text);
+      } catch (e) {
+        console.warn('Error in voice listener:', e);
+      }
+    });
   }
 
   static stop() {
     if (this.synth) {
-      this.synth.cancel();
+      try {
+        this.synth.cancel();
+      } catch (e) {
+        // ignore
+      }
       this.notify(false, '');
     }
   }
@@ -29,49 +39,61 @@ export class VoiceService {
       return;
     }
 
-    // Cancel any ongoing speech
-    this.synth.cancel();
+    try {
+      // Cancel any ongoing speech
+      this.synth.cancel();
 
-    const utterance = new SpeechSynthesisUtterance(text);
-    this.activeUtterance = utterance;
+      const utterance = new SpeechSynthesisUtterance(text);
+      this.activeUtterance = utterance;
 
-    // Pick appropriate voice
-    const voices = this.synth.getVoices();
-    if (lang === 'hi') {
-      utterance.lang = 'hi-IN';
-      const hiVoice = voices.find(v => v.lang.includes('hi') || v.name.toLowerCase().includes('hindi'));
-      if (hiVoice) utterance.voice = hiVoice;
-    } else if (lang === 'mr') {
-      utterance.lang = 'mr-IN';
-      const mrVoice = voices.find(v => v.lang.includes('mr') || v.name.toLowerCase().includes('marathi'));
-      if (mrVoice) utterance.voice = mrVoice;
-      else {
-        // Fallback to Hindi voice for Marathi devanagari pronunciation
-        const fallbackHi = voices.find(v => v.lang.includes('hi'));
-        if (fallbackHi) utterance.voice = fallbackHi;
+      // Pick appropriate voice
+      let voices: SpeechSynthesisVoice[] = [];
+      try {
+        voices = this.synth.getVoices() || [];
+      } catch (e) {
+        voices = [];
       }
-    } else {
-      utterance.lang = 'en-IN';
-      const enVoice = voices.find(v => v.lang.includes('en-IN') || v.lang.includes('en'));
-      if (enVoice) utterance.voice = enVoice;
-    }
 
-    utterance.rate = 0.95; // Slightly slower for low-literacy clarity
-    utterance.pitch = 1.0;
+      if (lang === 'hi') {
+        utterance.lang = 'hi-IN';
+        const hiVoice = voices.find(v => v.lang.includes('hi') || (v.name && v.name.toLowerCase().includes('hindi')));
+        if (hiVoice) utterance.voice = hiVoice;
+      } else if (lang === 'mr') {
+        utterance.lang = 'mr-IN';
+        const mrVoice = voices.find(v => v.lang.includes('mr') || (v.name && v.name.toLowerCase().includes('marathi')));
+        if (mrVoice) utterance.voice = mrVoice;
+        else {
+          const fallbackHi = voices.find(v => v.lang.includes('hi'));
+          if (fallbackHi) utterance.voice = fallbackHi;
+        }
+      } else {
+        utterance.lang = 'en-IN';
+        const enVoice = voices.find(v => v.lang.includes('en-IN') || v.lang.includes('en'));
+        if (enVoice) utterance.voice = enVoice;
+      }
 
-    utterance.onstart = () => {
+      utterance.rate = 0.95;
+      utterance.pitch = 1.0;
+
+      utterance.onstart = () => {
+        this.notify(true, text);
+      };
+
+      utterance.onend = () => {
+        this.notify(false, '');
+      };
+
+      utterance.onerror = () => {
+        this.notify(false, '');
+      };
+
+      this.synth.speak(utterance);
+    } catch (err) {
+      console.warn('SpeechSynthesis error on device:', err);
+      // Fallback: still notify UI so subtitles/visual cues show up
       this.notify(true, text);
-    };
-
-    utterance.onend = () => {
-      this.notify(false, '');
-    };
-
-    utterance.onerror = () => {
-      this.notify(false, '');
-    };
-
-    this.synth.speak(utterance);
+      setTimeout(() => this.notify(false, ''), 4000);
+    }
   }
 
   // Helper vernacular phrase generators
