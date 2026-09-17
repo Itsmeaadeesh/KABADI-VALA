@@ -1,267 +1,418 @@
 # KABADIWALA CONNECT — COMPLETE SYSTEM DOCUMENTATION
 ### Smart India Hackathon 2026 | Problem Statement ID: 26229
-**Issued by**: Ministry of Mines (MoM) / Jawaharlal Nehru Aluminium Research Development and Design Centre (JNARDDC)  
+**Issuing Authority**: Ministry of Mines (MoM) / Jawaharlal Nehru Aluminium Research Development and Design Centre (JNARDDC)  
 **Problem Statement**: *"Kabadiwala Connect – Bringing the Informal Collector into the Formal Recycling Chain"*
 
 ---
 
-## 1. Executive Summary & Vision
+## 1. Project Overview & Vision
 
-India generates over **3.2 million tonnes of e-waste annually**, ranking as the third-largest producer in the world. Over **90–95% of this waste is managed by the informal sector**—an estimated 1.5 million local scrap collectors (*kabadiwalas*) and dismantlers.
+India produces over **3.2 million tonnes of electronic waste annually**, ranking as the third-largest producer in the world. However, **more than 90–95% of this waste flows through the informal sector**—an estimated network of 1.5 million grassroots scrap collectors (*kabadiwalas*) and informal godown dismantlers.
 
-### The Core Problem:
-1. **Middlemen Exploitation**: Informal collectors sell complex electronic components (printed circuit boards, lithium batteries) as generic iron or scrap, losing up to **40–60% of true value**.
-2. **Severe Environmental & Health Hazards**: Informal dismantling relies on hazardous crude practices—open-air cable burning (releasing dioxins/furans), toxic cyanide/nitric acid baths for PCB gold recovery, and manual lead-acid battery cracking.
-3. **Loss of Critical & Strategic Minerals**: Rare and high-value materials (Copper, Lithium, Cobalt, Neodymium, Tantalum, Gold, Indium) are discarded in landfills or poorly extracted with low recovery yields, jeopardizing national resource security.
-4. **Lack of Legal & Financial Footprint**: Kabadiwalas lack legal CPCB documentation, formal bank credit, and identity in the national Extended Producer Responsibility (EPR) compliance framework.
+### The Systemic Challenges:
+1. **Middlemen Exploitation & Information Asymmetry**: Informal collectors sell complex electronic components (such as server motherboards, multi-layer PCBs, and lithium batteries) as generic scrap or mixed iron, losing **40% to 60% of true intrinsic value**.
+2. **Severe Health & Environmental Degradation**: Informal recovery relies on crude, dangerous methods:
+   - *Open-air cable burning* releasing cancer-causing dioxins, furans, and lead particles.
+   - *Cyanide and nitric acid baths* for rudimentary gold leaching, causing acid burns, toxic fumes, and soil/water pollution.
+   - *Hammer smashing of lithium-ion cells*, leading to volatile fires and permanent damage.
+3. **Loss of Strategic Critical Minerals**: Rare and high-value materials essential to national security and green transitions (**Copper, Lithium, Cobalt, Neodymium, Tantalum, Gold, Indium**) are either lost in landfills or recovered with sub-25% extraction efficiency.
+4. **Zero Legal & Financial Identity**: Kabadiwalas operate entirely off-the-books, possessing no CPCB compliance proof, no verifiable transaction history, and zero access to institutional micro-credit (e.g. PM SVANidhi).
 
 ### The Solution — Kabadiwala Connect:
-A civic-tech circular economy ecosystem connecting the **Informal E-Waste Collector** directly to **CPCB-Authorized Recyclers** under **Ministry of Mines / JNARDDC** governance. The platform is designed with low-literacy ergonomics (vernacular voice, visual AI classification, tactile numeric steppers), guaranteed price transparency, offline-first data sync, 2-party digital scale verification, and national strategic mineral tracking.
+**Kabadiwala Connect** is a production-grade full-stack civic-tech platform that integrates the informal e-waste collector into the formal, CPCB-certified circular economy. It features:
+* **Mobile-First Low-Literacy Interface**: Tactile design, 100% trilingual vernacular reactivity (English, Hindi, Marathi), and native voice speech synthesis.
+* **Live Google Gemini 3.6 Flash Multimodal Vision AI**: Instant photo-based component identification, grading, critical mineral extraction forecasting, and hazard guidance.
+* **Guaranteed Minimum Support Benchmark Rates**: Dynamic commodity price boards tied to Ministry of Mines benchmarks.
+* **Offline-First Resilience**: Browser-level IndexedDB (Dexie.js) caching with automatic background synchronization upon reconnection.
+* **Calibrated 2-Party Scale Reconciliation**: QR manifest generation and verifiable digital handover certificates with instant simulated UPI payouts.
+* **Verifiable Digital Khata**: Legitimate transaction passbooks enabling financial inclusion and bank loan readiness.
+* **National Mineral Tracking & Oversight**: Geospatial heatmaps, critical mineral recovery analytics, and unit economics simulations for JNARDDC / Ministry regulators.
 
 ---
 
-## 2. System Architecture & Tech Stack
+## 2. Live Links & Project Coordinates
 
+| Platform / Service | Link / Coordinate | Status |
+| :--- | :--- | :--- |
+| **Live Production Web App** | [https://kabadiwala-connect-khaki.vercel.app](https://kabadiwala-connect-khaki.vercel.app) | `Active` (Vercel Global CDN) |
+| **GitHub Repository** | [https://github.com/Itsmeaadeesh/KABADI-VALA](https://github.com/Itsmeaadeesh/KABADI-VALA) | `Active` (`main` branch) |
+| **Local Dev Server** | `http://localhost:5174` (Client) & `http://localhost:5001` (Backend) | Verified & Tested |
+| **Problem Statement** | SIH 2026 — Problem Statement ID: 26229 | Ministry of Mines / JNARDDC |
+
+---
+
+## 3. High-Level Architecture & Tech Stack
+
+```mermaid
+graph TD
+    subgraph Client["Frontend Client (React 18 + TypeScript + Vite)"]
+        UI["Mobile-First PWA (Tailwind CSS, Lucide Icons, Recharts, Leaflet)"]
+        Voice["Vernacular Voice Engine (Web Speech API: EN, HI, MR)"]
+        AI_Vision["Gemini 3.6 Flash Vision (Multimodal REST API)"]
+        OfflineSync["Offline Sync Layer (Dexie.js / IndexedDB Cache & Queue)"]
+    end
+
+    subgraph Backend["Application Server (Node.js + Express + TypeScript)"]
+        REST_API["REST Endpoints (/api/lots, /api/prices, /api/recyclers, /api/handover, /api/sync)"]
+        DB_Driver["better-sqlite3 with WAL Mode & Foreign Keys"]
+    end
+
+    subgraph Database["Relational Storage (SQLite 3)"]
+        Tables["Materials | Prices | Lots | Facilities | Pickups | Handover Records | Ledgers"]
+    end
+
+    subgraph External["External Cloud Services"]
+        Gemini["Google AI Studio / Gemini 3.6 Flash Vision API"]
+        Vercel["Vercel Edge Network (Auto-Deployments & Cache Busting)"]
+        OSM["OpenStreetMap / Leaflet Tile Servers"]
+    end
+
+    UI --> Voice
+    UI --> AI_Vision
+    UI --> OfflineSync
+    AI_Vision --> Gemini
+    UI --> OSM
+    OfflineSync -->|Auto-Flush on Reconnect| REST_API
+    UI -->|REST / JSON| REST_API
+    REST_API --> DB_Driver
+    DB_Driver --> Tables
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                             PRESENTATION LAYER                              │
-│                                                                             │
-│   [ Landing Page ]      [ Collector PWA ]     [ Recycler Scale ]  [ Admin ] │
-│   Corporate Gateway     Low-Literacy Tactile   Verification Desk   Gov Portal│
-│   Ref. Theme (#fcfdfc)  EN / HI / MR Voice     QR & UPI Receipt    JNARDDC  │
-└──────────────────────┬────────────────────────────────┬─────────────────────┘
-                       │                                │
-                       ▼                                ▼
-┌──────────────────────────────────────┐  ┌───────────────────────────────────┐
-│           CLIENT SERVICES            │  │        OFFLINE RESILIENCE         │
-│  • Web Speech API (Vernacular TTS)   │  │  • Dexie.js (IndexedDB Queue)     │
-│  • AI Computer Vision Classifier     │  │  • Background Sync Flush          │
-│  • Leaflet GIS Mapping Engine        │  │  • Network State Simulator        │
-│  • Recharts Analytical Visualizer    │  │  • Optimistic UI Updates          │
-└──────────────────────┬───────────────┘  └─────────────┬─────────────────────┘
-                       │                                │
-                       └───────────────┬────────────────┘
-                                       │ REST / JSON (Vite Proxy :5174 -> :5001)
-                                       ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                            APPLICATION LAYER                                │
-│                         Express.js & TypeScript                             │
-│                                                                             │
-│  /api/auth       /api/materials   /api/prices     /api/lots   /api/recyclers│
-│  /api/pickups    /api/handover    /api/transactions /api/analytics /api/sync│
-└──────────────────────────────────────┬──────────────────────────────────────┘
-                                       │ better-sqlite3 with Statement Cache
-                                       ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                               DATABASE LAYER                                │
-│                         SQLite (WAL Mode Enabled)                           │
-│  10 Material Categories | 8 CPCB Recyclers | 30-Day Rate History | Ledgers   │
-└─────────────────────────────────────────────────────────────────────────────┘
+
+### Full Technology Breakdown:
+* **Frontend Framework**: React 18.3, Vite 6, TypeScript 5.
+* **Styling & Design System**: Tailwind CSS v3 with custom civic palette (`brand-50` through `brand-950`), custom scrollbars, safe-area inset management, and zero emojis (100% vector SVG icons via `lucide-react`).
+* **AI & Computer Vision**: Google Gemini 3.6 Flash Multimodal API via direct REST payload with structured JSON schema enforcement.
+* **Offline-First Storage**: Dexie.js (IndexedDB wrapper) with optimistic UI updates and background sync queue.
+* **Vernacular Audio**: Web Speech API (`SpeechSynthesis`) with localized phrase builders in Hindi (`hi-IN`), Marathi (`mr-IN`), and English (`en-IN`).
+* **GIS Mapping**: Leaflet and React-Leaflet with OpenStreetMap tiles and custom GPS facility pins.
+* **Data Visualization**: Recharts (historical commodity price curves, regional flow heatmaps, critical mineral recovery bar charts).
+* **Backend Runtime**: Node.js v24 LTS, Express.js, TypeScript.
+* **Database**: `better-sqlite3` with Write-Ahead Logging (WAL mode), cascade constraints, and prepared statements.
+* **PWA & Production Hardening**: Custom service worker (`sw.js`) with cache-busting, inline self-healing script, and React Error Boundary.
+
+---
+
+## 4. User Personas & Role-Based Access
+
+The platform supports 3 distinct user personas, accessible via a 1-click switcher in the global header:
+
+```text
+┌──────────────────────────────────────────────────────────────────────────┐
+│                      KABADIWALA CONNECT ROLES                            │
+├──────────────────────────┬──────────────────────────┬────────────────────┤
+│  1. COLLECTOR            │  2. RECYCLER             │  3. ADMIN          │
+│  Ramesh Kumar (Dharavi)  │  Rajesh Sharma           │  Dr. S. K. Verma   │
+│  Role: Informal Picker   │  Role: Facility Manager  │  Role: Regulator   │
+│  Org: Local Kabadiwala   │  Org: GreenCycle (CPCB)  │  Org: JNARDDC/MoM  │
+│  Phone: 9999999999       │  Phone: 8888888888       │  Phone: 7777777777 │
+│  Portal: /collector      │  Portal: /recycler       │  Portal: /admin    │
+└──────────────────────────┴──────────────────────────┴────────────────────┘
 ```
 
-### Full Technology Matrix:
-* **Frontend Framework**: React 18 with TypeScript, Vite build tool
-* **Styling**: Tailwind CSS with custom civic emerald theme (`brand-50` through `brand-950`), custom scrollbars, and high-contrast accessibility
-* **Iconography**: Clean vector SVG icons from `lucide-react` (100% zero-emoji corporate design)
-* **Vernacular Voice**: Web Speech API (`SpeechSynthesis`) with dynamic phrasing in English, Hindi (`hi-IN`), and Marathi (`mr-IN`)
-* **GIS Mapping**: Leaflet & React-Leaflet with OpenStreetMap cartography and customized GPS marker pins
-* **Data Visualization**: Recharts (Responsive LineCharts, BarCharts, and Tooltips)
-* **Local Storage & Offline Sync**: Dexie.js (IndexedDB) with optimistic mutations and automatic queue replay
-* **Backend Runtime**: Node.js (v24 LTS compatible), Express.js, TypeScript
-* **Database Driver**: `better-sqlite3` with SQLite Write-Ahead Logging (WAL mode), relational foreign keys, and statement caching
-* **Security & Auth**: Role-based access simulation (Collector, Recycler, Admin) with phone OTP mock flow
+---
+
+## 5. Screen-by-Screen Detailed Walkthrough
+
+### 5.1. Public Landing Page (`/`)
+Designed as a civic-tech gateway for citizens, municipal authorities, and scrap businesses:
+* **Unified Global Header**: Clean brand logo, Ministry of Mines / JNARDDC subtitle, role switcher, sync status pill, and language selector (**EN**, **हिंदी**, **मराठी**).
+* **Hero Section**:
+  * Headline: *"From Kabadiwala to Circular Economy"*
+  * Subtitle: *"Bridging the informal e-waste collector into the formal, traceable recycling ecosystem under SIH Problem Statement 26229."*
+  * Primary Action: `Start Selling E-Waste` (leads to `/sell`).
+  * Secondary Action: `Find Authorized Recycler` (leads to `/recyclers`).
+* **Three Core Value Pillars**:
+  1. *Fair Benchmark Rates*: Real-time pricing tied to actual commodity metals.
+  2. *Safe Handling & Health*: Eliminates toxic open-air burning and acid leaching with a +5% Intact Quality Bonus.
+  3. *Digital Traceability*: Verifiable CPCB manifests and digital passbook records for micro-finance.
+* **Vector Circular Economy Pipeline**: Responsive visual cards mapping the 4-step formal journey:
+  `Informal Collector` ➔ `Certified Recycler` ➔ `Verified Handover` ➔ `Formal Refining`.
+* **Persona Portal Cards**: Direct entry cards for Collector, Recycler, and Government Admin.
+* **Live Benchmark Price Ticker**: Real-time ticker streaming current per-KG buy rates for PCBs, Copper Wires, Batteries, and Motors.
+* **Institutional Footer**: Government attribution, quick navigation links, and SIH 26229 compliance statement.
 
 ---
 
-## 3. Detailed Walkthrough of Every Page & View
-
-### 3.1. Main Public Landing Page (`/`)
-Built to match the enterprise circular economy design:
-1. **Top Navbar**:
-   * **Brand Identity**: Clean leaf/recycle icon with *"Kabadiwala Connect"* in bold typography.
-   * **Navigation Links**: *Home*, *Marketplace*, *Recyclers*, *Resources*, *Community*, *About*.
-   * **Vernacular Language Switcher**: One-tap toggle between **English**, **हिंदी**, and **मराठी**.
-   * **Search Modal Trigger**: Instant search across 10 electronic materials, live scrap rates, and safety rules.
-   * **Role-Based Log In Button**: Opens modal to sign in or instantly test as Collector, Recycler, or Admin.
-2. **Hero Section**:
-   * **Headline**: *"Turn Scrap Into Fair, Traceable Income"*.
-   * **Subheadline**: *"Join Kabadiwala Connect to price, trace, and sell e-waste the formal way."*
-   * **Pill Call-to-Action Buttons**:
-     * `Start Collecting >`: Direct entrypoint to the informal collector mobile/desktop workflow.
-     * `Find a Recycler`: Direct link to the registered recycler map.
-   * **Trust Badges**: Three circular pastel badges—*Cleaner Communities*, *Fair Price For Scrap*, *Empowering Collectors*.
-   * **High-Resolution Circular Economy Diagram**: Illustrating the lifecycle flow from waste generation to collector aggregation, CPCB refining, and critical mineral recovery.
-   * **Trust Seal Tag**: Floating badge *"100% Traceable Chain • JNARDDC Benchmark"*.
-3. **Live Benchmark Rate Ticker**:
-   * Horizontal marquee streaming real-time rates from the database (e.g., *Copper Cable ₹520/KG ▲ 2.4%*, *Motherboard PCB ₹410/KG ▲ 1.8%*, *Li-Ion Battery ₹280/KG ▼ 0.7%*).
-4. **Value Proposition Grid**:
-   * **Fair Benchmark Pricing**: Direct tie-in to national scrap commodity benchmarks.
-   * **Doorstep Recycler Logistics**: Verified recyclers pick up bulk lots directly from local scrap shops.
-   * **Verifiable Digital Khata**: Legitimate financial footprint unlocking micro-loans and PM SVANidhi benefits.
-   * **Critical Mineral Recovery**: Securing high-purity domestic minerals for India's strategic industries.
-5. **Interactive Persona Showcase**:
-   * Card tabs showcasing the experience for **Collector Ramesh**, **Recycler GreenCycle**, and **Admin JNARDDC**.
-6. **Official Footer**:
-   * Ministry of Mines and JNARDDC attribution, Quick Links, Compliance Declarations, and Problem Statement ID 26229 badge.
-
----
-
-### 3.2. Global Evaluation Header (`DemoHeader.tsx`)
-Present at the top of every internal view:
-* **Hackathon Badge**: `SIH 2026 #26229 • Ministry of Mines / JNARDDC`.
-* **3-Minute Jury Flow Button**: Launches the 20-step interactive presentation modal (`JuryTourModal.tsx`) with auto-jump shortcuts to each stage of the transaction lifecycle.
-* **Role Switcher Toolbar**: One-click switching between:
-  * `Collector (Ramesh)` -> Routes to `/collector`
-  * `Recycler (GreenCycle)` -> Routes to `/recycler`
-  * `Admin (JNARDDC)` -> Routes to `/admin`
-* **Public Portal Button**: Returns immediately to the public landing page (`/`).
-* **Offline Sync Simulator & Status Indicator**:
-  * Real-time network status pill (`Online` / `Offline Sim`).
-  * Clicking the button simulates a network disconnection (turning off network requests and forcing Dexie.js IndexedDB offline buffering). Clicking again restores connection and flushes pending mutations to the server.
-
----
-
-### 3.3. Collector Experience (`/collector`, `/sell`, `/lots`, `/prices`, `/recyclers`, `/khata`, `/safety`)
+### 5.2. Collector Portal (`/collector`)
 
 #### A. Collector Home (`/collector`)
-* **Welcome Banner**: Displays collector's name (Ramesh), localized greeting in selected language, GPS location (*Dharavi Sector 3, Mumbai • Live GPS Active*), and vernacular voice button.
-* **Monthly Earnings Summary**: Real-time ticker showing current month's formal earnings (e.g. ₹28,450) with quick link to Mera Khata.
-* **Tactile Action Grid** (Responsive 2-column desktop / 1-column mobile):
-  1. **Sell E-Waste (Hero Card)**: Direct jump to the 3-step AI scrap valuation workflow with camera icon and AI badge.
-  2. **Today's Price (Benchmark Rates)**: Live prices with trend indicators.
-  3. **Find Recycler (Facility Map)**: GPS locator with distance and doorstep pickup filters.
-  4. **Mera Khata (Passbook)**: Verified transaction history and bank statement export.
-  5. **Safety Center (Health Rules)**: Prohibited crude methods and +5% Intact Bonus guidelines.
+* **Top Greeting & Location Banner**:
+  * Personalized greeting: *"नमस्ते Ramesh"* / *"Welcome Ramesh"*.
+  * Live GPS tag: *"Dharavi Sector 3, Mumbai • Live GPS Active"*.
+  * Synced network status indicator.
+  * Vernacular voice speaker button reading out greeting and instructions.
+  * Current monthly earnings pill (e.g. ₹18,450) with quick jump to Khata.
+* **Dominant Hero Card: SELL E-WASTE**:
+  * Large green interactive touch card with camera icon, `AI Valuation` badge, and subtitle *"Sell safely & fairly • AI Valuation"*. Leads to `/sell`.
+* **2x2 Tactile Action Grid**:
+  * **PRICE (दाम देखें)**: Today's government-approved benchmark scrap rates ➔ `/prices`.
+  * **RECYCLER (रीसाइक्लर खोजें)**: Nearest CPCB-authorized facilities ➔ `/recyclers`.
+  * **MY LOTS (मेरे लॉट)**: Real-time tracking of registered digital manifests ➔ `/lots`.
+  * **MY KHATA (मेरा खाता)**: Verifiable digital passbook ledger ➔ `/khata`.
+* **Dedicated Safety Card (Full-Width)**:
+  * Health guidelines, toxic hazard warnings, and instructions on how to earn the **+5% Intact Bonus** ➔ `/safety`.
+* **Mobile Bottom Navigation (`CollectorBottomNav.tsx`)**:
+  * Sticky 5-tab navigation (*Home*, *Prices*, *Lots*, *Khata*, *Safety*) with safe-area bottom insets and guaranteed clearance.
 
-#### B. Sell E-Waste / Lot Creator (`/sell`)
-* **Step 1: Visual AI Component Identification**:
-  * Sample photo gallery (Motherboard PCB, Copper Cable, Li-Ion Battery, Electric Motor) or live camera/device upload.
-  * Simulated computer vision inference returns:
-    * Category Name & Sub-grade (e.g. *High Grade Server Motherboard*)
-    * Confidence Score (e.g. *94%*)
-    * Critical Mineral Yields (e.g. *Copper 22%, Gold 250g/t, Tantalum 0.4%*)
-    * Specific Hazard Warning (e.g. *Never burn or use acid leaching. Toxic fumes cause severe respiratory damage.*)
-* **Step 2: Weight & Condition Input**:
-  * Low-literacy weight adjuster with large tactile stepper buttons (`[-5]`, `[-1]`, `[+1]`, `[+5]` KG) and numerical display.
+---
+
+#### B. Sell E-Waste / 3-Step AI Lot Creator (`/sell`)
+A guided wizard specifically designed for low-literacy informal collectors:
+* **Step 1: Visual AI Classification**:
+  * Users can upload any photo or use the device camera, or select from sample components.
+  * **Live Google Gemini 3.6 Flash Multimodal Analysis**:
+    * Encodes image and passes to Gemini Vision API with JNARDDC prompt.
+    * Returns verified item name in English, Hindi, and Marathi.
+    * Displays confidence score (e.g. 96%) and detailed sub-grade.
+    * Displays extracted critical minerals (e.g., Gold 250 g/t, Copper 22%, Silver, Tantalum).
+    * Displays health hazard warning (e.g., *"Contains Lead solder and Brominated Flame Retardants. Do NOT burn."*).
+    * Shows live pulsing badge: `Gemini 3.6 Flash Vision`.
+* **Step 2: Category Confirmation**:
+  * User verifies the material category from 10 benchmark categories with icon representations.
+* **Step 3: Weight, Condition & Instant Valuation**:
+  * Giant numeric display in KG.
+  * Tactile stepper buttons: `[-5 KG]`, `[-1 KG]`, `[+1 KG]`, `[+5 KG]`.
+  * Numeric range slider for quick adjustments.
   * Condition Selector:
-    * **Intact (Certified)**: Grants **+5% Quality Bonus** on benchmark price.
-    * **Damaged**: Standard benchmark rate.
-    * **Stripped**: Discounted rate due to missing high-value chips/coils.
-* **Step 3: Instant Live Valuation & Manifest Submission**:
-  * Real-time calculation: `Weight × Benchmark Rate × Condition Multiplier = Estimated Payout`.
-  * Vernacular voice readout reading the exact calculation aloud.
-  * 1-Tap Manifest Creation: Generates unique digital manifest (e.g., `LOT-2026-MH-4821`), works 100% offline if disconnected.
+    * **Intact (+5% Quality Bonus)**: Undamaged components receiving maximum payout.
+    * **Damaged (Standard Rate)**: Typical handling.
+    * **Stripped (Discounted)**: Missing chips or sheared coils.
+  * **Instant Payout Calculation Card**:
+    * Formula: `Weight (KG) × Base Rate (₹/KG) × Condition Multiplier = Estimated Payout`.
+    * Vernacular audio button reads aloud: *"12.5 किलो मदरबोर्ड का अनुमानित दाम लगभग ₹5,381 है।"*
+  * **Submit Lot**: Generates a tamper-evident digital manifest (e.g. `LOT-2026-MH-4821`), triggers confetti celebration, and saves to IndexedDB/Cloud.
 
-#### C. Lot List & Digital Manifests (`/lots` and `/lots/:id`)
-* **Queue View**: Lists all created lots with status chips:
-  * `New Lot` (Draft / Pending)
-  * `Pickup Scheduled` (Doorstep truck dispatched)
-  * `Saved Locally` (Stored in IndexedDB pending network sync)
+---
+
+#### C. Live Benchmark Price Board (`/prices`)
+* **Commodity Rate Sheet**: Real-time prices for all 10 material classes with percentage trend badges (`+3.8%`, `-0.7%`).
+* **Material Category Filter Pills**: Quick filters (*Circuit Boards*, *Cables*, *Batteries*, *Motors*).
+* **30-Day Historical Trend Chart**: Interactive Recharts line chart comparing benchmark rates against market highs and lows.
+* **Vernacular Audio Broadcast**: 1-tap read-aloud reading daily benchmark rates in the selected language.
+
+---
+
+#### D. Recycler Locator & Logistics (`/recyclers`)
+* **Dual View Mode**: Segmented toggle between **List View** and **Interactive Map**.
+* **Leaflet GPS Map**: OpenStreetMap centered on Mumbai MMR with custom location pins for all 8 CPCB-registered recycling facilities.
+* **Distance Filter Chips**: Quick filtering for `5 KM`, `10 KM`, `25 KM`, and `All`.
+* **Facility Cards**: Displaying facility name, address, CPCB license number, driving distance, rating, verified purchase rate, and doorstep truck availability.
+* **Pickup Booking Modal**:
+  * Select pickup date and time slot (*Morning 10 AM - 1 PM*, *Afternoon 2 PM - 5 PM*).
+  * Submits doorstep collection request and locks benchmark price for **48 hours**.
+
+---
+
+#### E. Registered Manifests / My Lots (`/lots` and `/lots/:id`)
+* **Lot Queue**: Lists all registered lots with color-coded status badges:
+  * `New Lot` (Newly created draft)
+  * `Pickup Scheduled` (Truck dispatched)
+  * `Saved Locally` (Offline lot waiting for network sync)
   * `Verified & Paid` (Completed transaction)
-* **Detail View (`/lots/:id`)**:
-  * High-resolution component image.
-  * Verifiable QR manifest for scale scanning.
-  * Timeline audit trail: *Created -> Recycler Matched -> Handover Verified -> Paid*.
-  * Strategic mineral tags and printable digital receipt.
+* **Lot Detail View (`/lots/:id`)**:
+  * High-resolution component photograph.
+  * Digital Handover QR Code modal trigger.
+  * Timeline audit trail: *Created ➔ Recycler Matched ➔ Scale Verified ➔ UPI Disbursed*.
+  * Printable receipt action.
 
-#### D. Live Price Board (`/prices`)
-* **Commodity Ticker**: Real-time rates for all 10 material classes.
-* **30-Day Price Trend Charts**: Interactive Recharts graph comparing historical daily fluctuations for PCBs, Copper, Batteries, and Motors.
-* **Audio Rate Broadcast**: Speaker button reads out daily rates in Hindi, Marathi, or English.
+---
 
-#### E. Recycler Locator & Doorstep Logistics (`/recyclers`)
-* **Leaflet GPS Map**: Interactive OpenStreetMap centered on Mumbai MMR with custom pins for all 8 CPCB-registered recycling facilities.
-* **Filter Chips**: 5 KM, 10 KM, 25 KM, All Distances.
-* **Facility Cards**: Displaying business name, CPCB license number, distance, rating, verified rate for selected material, and doorstep pickup availability.
-* **Pickup Request Modal**: Select time slot (*Morning 10 AM - 1 PM*, *Afternoon 2 PM - 5 PM*, *Evening 5 PM - 8 PM*), locking the benchmark rate for **48 hours**.
+#### F. Mera Khata Passbook (`/khata`)
+* **Monthly Earnings Card**: High-contrast card showing total earnings (₹18,450), pending payments (₹3,250), completed lots count (17), and in-transit lots (2).
+* **Verified Ledger**: Chronological transaction history with unique reference numbers (`UPI-982173-SBI`), verified weights, and facility stamps.
+* **Official Income Statement Modal**:
+  * Formatted for micro-finance institutions and government welfare schemes.
+  * Displays total tonnage diverted, transaction count, total bank deposits, and estimated loan readiness (**Tier-2 Ready / PM SVANidhi Eligible**).
+  * 1-click **Print** and **PDF Download**.
 
-#### F. Mera Khata / Verifiable Digital Passbook (`/khata`)
-* **Earnings Overview**: Total monthly income, verified transactions count, and pending payments.
-* **Verified Ledger**: Detailed chronological list of payments with unique reference codes (`Ref: UPI-982173`), weights, and facility names.
-* **Official Income Statement Modal**: Generates a tamper-evident, stamped official income summary formatted for microfinance institutions and government loan schemes (PM SVANidhi).
+---
 
 #### G. Safety & Health Center (`/safety`)
-* **Prohibited Practices (Hazards)**:
+* **Prohibited Practices (DO NOTs)**:
   * *Open Wire Burning*: Lead and dioxin emission risks.
-  * *Cyanide / Acid Bath Leaching*: Severe lung burns and toxic chemical waste.
-  * *Hammer Smashing*: Toxic lithium fire risks and shattered chip loss.
-* **Recommended Protocols (Incentives)**:
-  * *Intact Handover*: +5% financial bonus for undamaged components.
-  * *Protective Gear*: Gloves and masks for heavy electrical motors.
+  * *Cyanide / Acid Bath Leaching*: Severe lung burns and toxic wastewater.
+  * *Hammer Smashing*: Toxic lithium fire hazard.
+* **Standard Operating Procedures (DOs)**:
+  * *Intact Handover*: Explaining why keeping boards undamaged earns the +5% bonus.
+  * *Protective Gear*: Gloves and dust masks for motor disassembly.
 
 ---
 
-### 3.4. Recycler Logistics & Scale Verification Desk (`/recycler`)
+### 5.3. Recycler Portal (`/recycler`)
 
-#### A. Facility Dashboard (`/recycler`)
-* **Executive Stats**: Total tonnage received, active pickups in transit, and verified collector payouts.
-* **Incoming Queue**: Table of incoming digital manifests awaiting doorstep collection or physical scale verification.
+#### A. Recycler Operations Dashboard (`/recycler`)
+* **Operations KPIs**: Total received tonnage (42.8 MT), pending pickups (6), and daily collector payouts (₹1.48L).
+* **Incoming Lots Queue**: Real-time table of incoming manifests with collector names, declared weights, and inspection buttons.
 
-#### B. Physical Scale Verification Desk (`/recycler/handover`)
-* **Manifest Lookup / Scanner**: Enter or scan incoming lot QR code (e.g. `LOT-2026-MH-4821`).
-* **Scale Verification Weight Input**: Recycler inputs calibrated weighbridge/scale weight (e.g. `12.2 KG` vs collector's estimated `12.5 KG`).
-* **Quality Grade Adjustment**: Confirm intact status or adjust condition.
-* **Payout Calculation**: System re-evaluates final payout using locked benchmark rate.
-* **Digital Certificate & Instant Payment**:
-  * Generates CPCB Handover Certificate with serial registration.
-  * Records instant UPI payment transaction reference (`UPI-982173`).
-  * Immediately updates collector's Mera Khata and national mineral analytics.
+#### B. Scale Verification & Digital Handover Desk (`/recycler/handover`)
+* **Manifest Identifier Lookup**: Enter or inspect incoming Lot ID (e.g. `LOT-2026-MH-4821`).
+* **Scale Weight Reconciliation**: Input actual weight recorded on calibrated weighbridge (e.g. `12.2 KG` vs declared `12.5 KG`).
+* **Rate Adjustment**: Finalize agreed per-KG rate based on physical inspection.
+* **Confirm Handover & Payment**:
+  * Instantly records transaction and generates UPI reference ID.
+  * Generates CPCB Digital Handover Certificate with QR verification.
+  * Updates collector's Khata passbook and national strategic mineral totals.
 
-#### C. Price Manager (`/recycler/prices`)
-* Recyclers can adjust offered purchase rates relative to government benchmarks to attract specific high-demand materials (e.g., offering +₹20/kg for High-Grade Server PCBs).
+#### C. Dynamic Price Manager (`/recycler/prices`)
+* Recyclers can configure offered purchase rates relative to government benchmarks to incentivize specific scrap streams.
 
-#### D. Legal Profile (`/recycler/profile`)
-* Displays CPCB Authorization Certificate, SPCB registration, annual capacity (25,000 MT/year), address, and accepted e-waste categories.
+#### D. Legal Facility Profile (`/recycler/profile`)
+* Displays CPCB Authorization Certificate (`CPCB/E-WASTE/2023/MH-092`), SPCB registration, annual capacity (25,000 MT/year), facility address, and accepted e-waste categories.
 
 ---
 
-### 3.5. Ministry of Mines / JNARDDC Governance Portal (`/admin`)
+### 5.4. Admin Governance & Oversight Portal (`/admin`)
 
-#### A. Executive Command Overview (`/admin`)
-* **National Key Performance Indicators (KPIs)**:
+#### A. Executive Overview (`/admin`)
+* **National Key Performance Indicators**:
   * **1,248** Collectors Formalized
-  * **428.7** Tonnes E-Waste Diverted from Dumpsites
-  * **8,423** Tamper-Evident Transactions Recorded
-  * **₹4.9 Lakhs** Direct Value Disbursed to Informal Sector
-  * **8** CPCB Authorized Facilities Active
-* **Monthly Formalization Trends**: Interactive Recharts area chart tracking tonnage diverted over the past 6 months.
-* **Material Composition Breakdown**: Distribution between PCBs, Copper Wires, Batteries, and Motors.
+  * **428.7** Tonnes E-Waste Diverted from Landfills
+  * **8,423** Verifiable Transactions Logged
+  * **₹4.9 Lakhs** Direct Value Disbursed to Grassroots Collectors
+  * **8** Active CPCB-Registered Facilities
+* **Formalization Growth Trends**: Interactive Recharts area chart tracking monthly diverted tonnage over the last 6 months.
+* **Material Composition Breakdown**: Proportional distribution across PCBs, Copper Wires, Batteries, and Motors.
 
-#### B. Regional Geospatial Flow Heatmap (`/admin/heatmap`)
-* Visualizes formalization rates across Maharashtra districts and national technology hubs:
-  * **Mumbai MMR**: 142.5 T (78% formalization)
-  * **Pune & PCMC**: 98.2 T (72% formalization)
-  * **Nagpur (JNARDDC Center)**: 64.1 T (85% formalization)
-  * **Nashik Industrial**: 38.6 T (64% formalization)
-  * **Chhatrapati Sambhajinagar**: 26.4 T (59% formalization)
-  * **Delhi NCR, Bengaluru, Hyderabad**: National pilot corridors.
+#### B. Regional Geospatial Heatmap (`/admin/heatmap`)
+* Tracks regional e-waste flows across Maharashtra industrial corridors and national technology hubs:
+  * **Mumbai MMR**: 142.5 Tonnes (78% formalization)
+  * **Pune & PCMC**: 98.2 Tonnes (72% formalization)
+  * **Nagpur (JNARDDC Center)**: 64.1 Tonnes (85% formalization)
+  * **Nashik Industrial**: 38.6 Tonnes (64% formalization)
+  * **Chhatrapati Sambhajinagar**: 26.4 Tonnes (59% formalization)
+  * **National Pilot Corridors**: Delhi NCR, Bengaluru, Hyderabad.
 
-#### C. Critical Mineral Analytics (`/admin/minerals`)
-* Tracks recovery volume and strategic domestic value for national security:
-  * **Copper (Cu)**: 92.4 tonnes (Strategic Base Metal)
-  * **Lithium (Li)**: 4.8 tonnes (EV Battery Critical)
-  * **Cobalt (Co)**: 1.7 tonnes (Energy Transition Critical)
-  * **Neodymium (Nd)**: 820 kg (Rare Earth Permanent Magnets)
-  * **Gold (Au)**: 21.4 kg (Precious Technology Metal)
+#### C. Strategic Critical Mineral Analytics (`/admin/minerals`)
+* Monitors recovery volume and strategic domestic value:
+  * **Copper (Cu)**: 92.4 tonnes (Grid & Electrification)
+  * **Lithium (Li)**: 4.8 tonnes (EV Battery Cells)
+  * **Cobalt (Co)**: 1.7 tonnes (Energy Storage)
+  * **Neodymium (Nd)**: 820 kg (Permanent Magnets)
+  * **Gold (Au)**: 21.4 kg (Precious Electronics)
   * **Tantalum (Ta)**: 340 kg (Defense Electronics)
-  * **Indium (In)**: 95 kg (Display Glass & Semiconductors)
+  * **Indium (In)**: 95 kg (Display Glass & Touch Panels)
 
-#### D. Unit Economics Engine (`/admin/economics`)
-* Side-by-side comparative simulation:
-  * **Informal Middlemen Channel**: ₹3,800 payout, 40% weight loss, environmental contamination, zero legal proof.
-  * **Kabadiwala Connect Formal Channel**: ₹5,185 payout (+36% higher income), verified scale weight, +5% intact bonus, zero platform fee on collector, and official bank statement record.
+#### D. Unit Economics Calculator (`/admin/economics`)
+* Side-by-side comparative simulation (100 KG E-Waste Lot):
+  * **Informal Middleman Channel**: ₹4,200 net payout, 40% value loss, environmental damage, zero legal footprint.
+  * **Kabadiwala Connect Formal Channel**: ₹5,775 net payout (**+37.5% net income increase**), verified scale weight, +5% intact bonus, zero collector fee, verified bank passbook record.
 
 #### E. Recycler Compliance Audit (`/admin/compliance`)
-* Audit table monitoring recycling plants: CPCB license status, EPR target fulfillment percentage, scale calibration validity, and payment integrity scores.
+* Real-time compliance monitoring: CPCB license status, EPR quota fulfillment percentage, weighbridge calibration validity, and payment integrity scores.
 
 ---
 
-## 4. Complete Database Schema & Seed Data
+## 6. Gemini 3.6 Flash Vision AI Integration Architecture
 
-The database is built on **SQLite with Write-Ahead Logging (WAL)**:
+### Pipeline Implementation:
+```text
+[ Physical E-Waste Photo ] ➔ [ Base64 Encoding ] ➔ [ Gemini 3.6 Flash Multimodal API ]
+                                                              │
+                                                              ▼
+                                              [ Structured JSON Enforcement ]
+                                                              │
+                     ┌────────────────────────────────────────┼────────────────────────────────────────┐
+                     ▼                                        ▼                                        ▼
+             [ Verified Category ]                  [ Critical Minerals ]                     [ Hazard Guidance ]
+       PCB / Copper / Battery / Motor          Gold (Au), Copper (Cu), Lithium          Toxic fumes, Acid warnings
+       (English, Hindi, and Marathi)           (Estimated Recovery % / Yield)           (Trilingual Flashcards)
+```
+
+### Prompt Specification:
+```text
+You are an expert E-Waste recycling AI for the Ministry of Mines (JNARDDC) under SIH Problem Statement 26229.
+Analyze this photo carefully.
+Identify the e-waste item, its composition, grade, critical minerals, and safe handling instructions.
+Return ONLY a valid raw JSON object matching this schema:
+{
+  "materialId": "mat-pcb" | "mat-cable-cu" | "mat-bat-li" | "mat-motors" | "mat-crt-disp" | "mat-alu-heatsink" | "mat-general-ewaste",
+  "code": "PCB" | "CABLE_CU" | "BAT_LI" | "MOTORS" | "CRT_DISP" | "ALU_HS" | "EWASTE_GEN",
+  "name": string (English),
+  "nameHi": string (Hindi Devanagari script),
+  "nameMr": string (Marathi Devanagari script),
+  "confidence": number (between 0.85 and 0.99),
+  "subGrade": string (detailed technical grade description),
+  "criticalMinerals": string[] (e.g. ["Copper (22%)", "Gold (250 g/t)", "Silver (1,100 g/t)"]),
+  "hazardWarning": string (English),
+  "hazardWarningHi": string (Hindi Devanagari),
+  "hazardWarningMr": string (Marathi Devanagari),
+  "suggestedCondition": "INTACT" | "DAMAGED" | "STRIPPED"
+}
+```
+
+### Security & Fallback Design:
+* Key is injected via `VITE_GEMINI_API_KEY` through Vercel Environment Variables and local `.env` (strictly gitignored).
+* In case of network disconnection or rate limits, the service falls back gracefully to internal preset samples without crashing.
+
+---
+
+## 7. Multilingual & Vernacular Accessibility System
+
+### Reactive Translation Engine:
+* Centralized dictionary in [`client/src/data/translations.ts`](file:///C:/Users/Aadeesh%20Jain/.gemini/antigravity/scratch/kabadiwala-connect/client/src/data/translations.ts).
+* Supports **English**, **हिंदी (Hindi)**, and **मराठी (Marathi)** with instant reactive switching via [`LanguageContext.tsx`](file:///C:/Users/Aadeesh%20Jain/.gemini/antigravity/scratch/kabadiwala-connect/client/src/context/LanguageContext.tsx).
+* Covers 100% of the public landing page, global header, navigation, form inputs, tooltips, commodity names, and institutional disclaimers.
+
+### Vernacular Speech Synthesis:
+* Managed via [`VoiceService.ts`](file:///C:/Users/Aadeesh%20Jain/.gemini/antigravity/scratch/kabadiwala-connect/client/src/services/voice.ts).
+* Synthesizes natural speech using the browser's `SpeechSynthesis` engine with fallback handling:
+  * Hindi: `hi-IN` with colloquial phrases (e.g. *"तांबे की केबल का आज का भाव ₹520 प्रति किलोग्राम है।"*).
+  * Marathi: `mr-IN` (e.g. *"तांब्याची केबल चा आजचा दर ₹520 प्रति किलो आहे."*).
+  * English: `en-IN`.
+
+---
+
+## 8. Mobile Phone Touch Ergonomics & Anti-Clipping Overhaul
+
+To ensure flawless operation across all smartphone viewports (from 360px budget Android phones to modern iPhones):
+1. **Elimination of Horizontal Overflow**:
+   * Global configuration in `index.css`: `overflow-x: hidden`, `width: 100%`, `max-width: 100vw`.
+   * Global header minimum width reduced from ~445px down to <270px on mobile: role buttons collapse to compact icon buttons with tooltips, and sync status displays as an indicator dot.
+2. **Anti-Clipping Bottom Clearance (`.pb-collector-nav`)**:
+   * Solved the CSS specificity bug where `.pb-safe` was overriding large padding values to 16px.
+   * Engineered `.pb-collector-nav` with `calc(7rem + env(safe-area-inset-bottom, 1rem)) !important`.
+   * Guarantees at least 50px+ of visible whitespace between the bottom-most card (e.g. Safety Card on Collector Home) and the floating bottom navigation bar.
+3. **Standardized Bottom Navigation**:
+   * Converted invalid `h-15` to standard `h-16` (64px) in `CollectorBottomNav.tsx`.
+   * Vertically centered icon and text tabs.
+4. **Scrollable Viewport Modals**:
+   * All modals (`QRModal`, `ReceiptModal`, `IncomeStatementModal`, `PickupModal`) are equipped with `max-h-[90vh] overflow-y-auto pb-8 my-auto`.
+   * Buttons are never cut off by mobile screen edges or browser URL bars.
+
+---
+
+## 9. Offline-First Synchronization Lifecycle
+
+```text
+[ Collector Creates Lot Offline ]
+               │
+               ▼
+[ Local Dexie.js (IndexedDB) ]
+   ├── 1. Optimistic write to local `lots` table
+   ├── 2. Enqueue mutation in `syncQueue` (status: 'PENDING')
+   └── 3. UI Badge displays: "Saved Locally (Offline)"
+               │
+   [ Network Connection Restored ]
+               │
+               ▼
+[ OfflineSyncContext Event Listener ]
+   ├── Reads pending mutations from `syncQueue`
+   ├── Sends batch payload to POST /api/sync/batch
+   └── Server commits transaction to SQLite
+               │
+               ▼
+[ Sync Queue Cleared ]
+   └── UI Badge updates to: "Synced"
+```
+
+---
+
+## 10. Database Schema & Data Models
+
+The relational schema is built on **SQLite with Write-Ahead Logging (WAL)**:
 
 ```sql
--- 1. Users & Profiles
+-- 1. Users & Roles
 CREATE TABLE users (
   id TEXT PRIMARY KEY,
   phone TEXT UNIQUE NOT NULL,
@@ -293,10 +444,10 @@ CREATE TABLE recyclers (
   service_radius INTEGER DEFAULT 25,
   pickup_available BOOLEAN DEFAULT 1,
   rating REAL DEFAULT 4.8,
-  rates TEXT -- JSON string of material-specific purchase rates
+  rates TEXT
 );
 
--- 2. Materials & Live Commodity Benchmarks
+-- 2. Materials & Commodity Benchmarks
 CREATE TABLE materials (
   id TEXT PRIMARY KEY,
   code TEXT UNIQUE NOT NULL,
@@ -309,7 +460,7 @@ CREATE TABLE materials (
   hazards TEXT,
   hazards_hi TEXT,
   hazards_mr TEXT,
-  critical_minerals TEXT -- JSON array of contained strategic minerals
+  critical_minerals TEXT
 );
 
 CREATE TABLE price_benchmarks (
@@ -374,100 +525,36 @@ CREATE TABLE transactions (
   payment_method TEXT DEFAULT 'UPI',
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
-
-CREATE TABLE safety_guidelines (
-  id TEXT PRIMARY KEY,
-  type TEXT CHECK(type IN ('DONT', 'DO')),
-  title TEXT NOT NULL,
-  title_hi TEXT,
-  title_mr TEXT,
-  description TEXT NOT NULL,
-  description_hi TEXT,
-  description_mr TEXT,
-  icon TEXT
-);
 ```
-
-### Seeded Materials:
-1. **Server Motherboard (High Grade PCB)** — ₹410/kg (Contains Copper, Gold, Tantalum)
-2. **Copper Insulated Wire / Cable** — ₹520/kg (Contains Copper 99% pure)
-3. **Lithium-Ion Battery Pack (EV/Laptops)** — ₹280/kg (Contains Lithium, Cobalt, Nickel)
-4. **Electric Motor / Alternator** — ₹185/kg (Contains Copper windings, Neodymium magnets)
-5. **Mobile Phone Circuit Board** — ₹850/kg (Contains Gold, Silver, Palladium, Tantalum)
-6. **Lead-Acid Inverter Battery** — ₹95/kg (Hazardous Lead / Acid)
-7. **Computer Power Supply (SMPS)** — ₹120/kg (Contains Copper, Aluminum, Ferrite)
-8. **Telecom Base Station PCB** — ₹650/kg (Contains Platinum group metals, Silver)
-9. **Display Glass & LCD Panels** — ₹45/kg (Contains Indium Tin Oxide)
-10. **Mixed Consumer Electronics** — ₹85/kg (General sorting baseline)
-
-### Seeded CPCB Recyclers:
-1. **GreenCycle E-Waste Recyclers Pvt Ltd** (Turbhe MIDC, Navi Mumbai) — CPCB: `MH/CPCB/EW/2024/0912`
-2. **E-Parisaraa Recycling Unit** (Bhiwandi Logistics Hub, Thane) — CPCB: `MH/CPCB/EW/2023/0411`
-3. **Maharashtra Eco-Refiners** (Bhosari MIDC, Pune) — CPCB: `MH/CPCB/EW/2024/1108`
-4. **JNARDDC Pilot E-Waste Extraction Facility** (Amravati Road, Nagpur) — CPCB: `MH/CPCB/EW/2025/001`
-5. **Eco-Birdd Recycling Solutions** (Ambad Industrial Estate, Nashik) — CPCB: `MH/CPCB/EW/2023/0842`
-6. **Marathwada Resource Recovery** (Waluj MIDC, Chhatrapati Sambhajinagar) — CPCB: `MH/CPCB/EW/2024/0521`
-7. **Attero Recycling** (Roorkee / National North Hub) — CPCB: `UA/CPCB/EW/2022/0101`
-8. **Hulladek Recycling** (Eastern Region Network) — CPCB: `WB/CPCB/EW/2023/0290`
 
 ---
 
-## 5. Complete REST API Reference
+## 11. REST API Reference
 
-| Method | Endpoint | Description | Request / Query Params | Sample Response |
+| Method | Endpoint | Description | Request / Query | Sample Output |
 | :--- | :--- | :--- | :--- | :--- |
-| `GET` | `/api/health` | Service health status | None | `{"status":"ok","service":"Kabadiwala Connect API","version":"1.0.0"}` |
-| `POST` | `/api/auth/login` | Mock phone + OTP login | `{"phone":"9999999999","role":"COLLECTOR"}` | `{"token":"mock-jwt","user":{...},"profile":{...}}` |
-| `GET` | `/api/materials` | Retrieve all 10 scrap categories | None | `[{"id":"mat-pcb-high","name":"Server Motherboard",...}]` |
-| `GET` | `/api/prices` | Benchmark prices & trends | None | `[{"material_id":"mat-pcb-high","benchmark_rate":410,...}]` |
-| `GET` | `/api/prices/history` | 30-day price trend history | `?materialId=mat-pcb-high` | `[{"date":"2026-08-12","rate":395},...]` |
-| `GET` | `/api/recyclers` | CPCB registered recyclers | `?lat=19.07&lng=72.87&maxDistance=25` | `[{"facility_name":"GreenCycle", "distanceKm":4.2,...}]` |
+| `GET` | `/api/health` | Service health status | None | `{"status":"ok","service":"Kabadiwala Connect API"}` |
+| `GET` | `/api/materials` | Retrieve all 10 material categories | None | `[{"id":"mat-pcb","name":"Server Motherboard",...}]` |
+| `GET` | `/api/prices` | Benchmark rates & trends | None | `[{"material_id":"mat-pcb","benchmark_rate":410,...}]` |
+| `GET` | `/api/prices/history` | 30-day commodity price curve | `?materialId=mat-pcb` | `[{"date":"1 Sep","benchmark":395},...]` |
+| `GET` | `/api/recyclers` | CPCB registered facilities | `?lat=19.04&lng=72.85` | `[{"facility_name":"GreenCycle","rating":4.8,...}]` |
 | `GET` | `/api/lots` | Filter lots by collector/status | `?collectorId=col-ramesh-1` | `[{"code":"LOT-2026-MH-4821","weight":12.5,...}]` |
-| `POST` | `/api/lots` | Create new digital manifest | `{"collectorId":"...","materialId":"...","weight":12.5}` | `{"id":"...","code":"LOT-2026-MH-4821",...}` |
-| `GET` | `/api/lots/:id` | Detailed manifest breakdown | Path param `id` or `code` | `{"lot":{...},"timeline":[...],"handover":{...}}` |
-| `POST` | `/api/pickups` | Request doorstep pickup | `{"lotId":"...","recyclerId":"...","scheduledSlot":"..."}` | `{"id":"pck-...", "status":"REQUESTED"}` |
-| `POST` | `/api/handover/verify` | Physical scale verification | `{"lotId":"...","scaleWeight":12.2,"ratePerKg":425}` | `{"handover":{...},"transaction":{...}}` |
+| `POST` | `/api/lots` | Create digital manifest | Payload: `{collectorId, materialId, weight}` | `{"id":"...","code":"LOT-2026-MH-4821",...}` |
+| `GET` | `/api/lots/:id` | Detailed manifest breakdown | Path param `id` or `code` | `{"lot":{...},"timeline":[...]}` |
+| `POST` | `/api/pickups` | Request doorstep pickup | Payload: `{lotId, recyclerId, scheduledSlot}` | `{"id":"pkp-...","status":"SCHEDULED"}` |
+| `POST` | `/api/handover/verify` | Physical scale verification & payment | Payload: `{lotCode, verifiedWeight, ratePerKg}` | `{"success":true,"transactionId":"txn-...",...}` |
 | `GET` | `/api/transactions` | Collector earnings ledger | `?collectorId=col-ramesh-1` | `[{"amount":5185,"reference_id":"UPI-982173",...}]` |
-| `GET` | `/api/analytics` | National KPIs & strategic minerals | None | `{"kpis":{...},"criticalMinerals":[...],"regionalData":[...]}` |
-| `GET` | `/api/safety` | Handling guidelines | None | `[{"type":"DONT","title":"Never Burn Wires",...}]` |
-| `POST` | `/api/sync` | Batch flush offline mutations | `{"mutations":[...]}` | `{"success":true,"syncedCount":3}` |
+| `GET` | `/api/analytics` | National KPIs & strategic minerals | None | `{"kpis":{...},"criticalMinerals":[...]}` |
+| `GET` | `/api/safety` | Safety guidelines & flashcards | None | `[{"type":"DONT","title":"Never Burn Wires",...}]` |
+| `POST` | `/api/sync/batch` | Flush offline IndexedDB mutations | Payload: `{mutations:[...]}` | `{"success":true,"synced":3}` |
 
 ---
 
-## 6. Offline-First Synchronization Architecture
+## 12. Strategic Mineral Yields & Economics Model
 
-Informal scrap collection often takes place in basement godowns, dense industrial scrap clusters, and semi-rural areas with zero or unstable connectivity.
+JNARDDC baseline laboratory models establish the following critical mineral recovery yields per metric tonne of pre-sorted e-waste scrap:
 
-```mermaid
-sequenceDiagram
-    autonumber
-    actor Collector as Informal Collector
-    participant PWA as Client App (PWA)
-    participant IDB as Local Dexie.js (IndexedDB)
-    participant Server as Express & SQLite Backend
-
-    Note over Collector,PWA: Network Disconnected (Offline)
-    Collector->>PWA: Takes photo & enters weight (12.5 KG)
-    PWA->>IDB: Stores in 'lots' & enqueues in 'syncQueue' (status: PENDING)
-    PWA-->>Collector: Instant tactile feedback: "Saved Locally (Offline)"
-    
-    Note over PWA,Server: Connectivity Restored (Online)
-    PWA->>PWA: OfflineSyncContext detects window.online
-    PWA->>IDB: Reads all mutations from 'syncQueue'
-    PWA->>Server: POST /api/sync (batch array of pending lots)
-    Server->>Server: Inserts lots into SQLite within transaction
-    Server-->>PWA: HTTP 200 { success: true, syncedCount: N }
-    PWA->>IDB: Clears flushed mutations from 'syncQueue'
-    PWA-->>Collector: Header updates: "Sync Complete"
-```
-
----
-
-## 7. Strategic Mineral Yield & Economics Model
-
-JNARDDC baseline laboratory models establish the following critical mineral recovery yields per metric tonne of separated scrap:
-
-| Scrap Material | Primary Target Minerals | Average Recovery Yield per Tonne | Strategic Domestic Application |
+| Scrap Component | Contained Critical Minerals | Recovery Yield / Tonne | Strategic Domestic Application |
 | :--- | :--- | :--- | :--- |
 | **High-Grade Motherboard PCBs** | Gold (Au), Copper (Cu), Tantalum (Ta), Silver (Ag) | ~250g Gold, ~220kg Copper, ~4kg Tantalum | Defense radar, semiconductors, power grid |
 | **EV & Laptop Li-Ion Batteries** | Lithium (Li), Cobalt (Co), Nickel (Ni) | ~70kg Lithium, ~120kg Cobalt, ~150kg Nickel | Indigenous EV battery cells, energy storage |
@@ -475,35 +562,41 @@ JNARDDC baseline laboratory models establish the following critical mineral reco
 | **Telecom Base Station Boards** | Palladium (Pd), Platinum (Pt), Copper (Cu) | ~80g Palladium, ~30g Platinum, ~280kg Copper | 5G infrastructure, aerospace catalysts |
 | **Display Screens & LCDs** | Indium (In), Tin (Sn) | ~250g Indium | Display touch panels, solar photovoltaic cells |
 
-### Economic Impact for the Informal Collector:
-* Under the traditional informal scrap model, 1 tonne of mixed e-waste yields an average of **₹28,000 – ₹35,000** to the collector due to arbitrary weight deductions and ignorance of mineral grades.
-* Under the **Kabadiwala Connect** model, pre-sorted components with verified scale weighing and CPCB transparent rates yield **₹46,000 – ₹54,000 per tonne**—a direct **35% to 50% increase in grassroots income**.
+### Economic Impact Comparison (100 KG Mixed Lot):
+
+| Financial Element | Traditional Informal Channel | Kabadiwala Connect Formal Model |
+| :--- | :--- | :--- |
+| **Gross Commodity Value** | ₹5,000 | ₹5,500 |
+| **Middleman Deduction** | -₹800 (16% value cut) | ₹0 deduction on collector |
+| **Quality Sorting Premium** | ₹0 | +₹275 (+5% Intact Bonus) |
+| **Net Collector Payout** | **₹4,200** | **₹5,775** |
+| **Net Income Increase** | — | **+₹1,575 (+37.5% direct income gain)** |
+| **Financial Identity** | Zero formal proof | Certified bank income passbook |
 
 ---
 
-## 8. Verification & Running Instructions
+## 13. Verification, Testing & Running Instructions
 
-### Prerequisites:
-* Node.js v18+ (tested and verified on Node.js v24.19.0)
-* npm
-
-### Running the Full Application:
+### Local Development Setup:
 ```bash
-# 1. Start Backend Server (runs on port 5001)
+# 1. Clone repository
+git clone https://github.com/Itsmeaadeesh/KABADI-VALA.git
+cd KABADI-VALA
+
+# 2. Setup and run Backend Server
 cd server
 npm install
 npm run build
 node dist/index.js
 
-# 2. Start Frontend Client (runs on port 5174 with API proxy)
-cd client
+# 3. Setup and run Frontend Client (in a separate terminal)
+cd ../client
 npm install
+# Configure client/.env with: VITE_GEMINI_API_KEY=your_key_here
 npm run dev
 ```
 
-### Access URLs:
-* **Public Web Application**: `http://localhost:5174/`
-* **Collector Portal**: `http://localhost:5174/collector`
-* **Recycler Portal**: `http://localhost:5174/recycler`
-* **Admin Governance Portal**: `http://localhost:5174/admin`
-* **Backend API Health Check**: `http://localhost:5001/api/health`
+### Access Ports:
+* **Frontend Web App**: `http://localhost:5174` (or `5173`)
+* **Backend REST API**: `http://localhost:5001/api/health`
+* **Live Production Cloud**: [https://kabadiwala-connect-khaki.vercel.app](https://kabadiwala-connect-khaki.vercel.app)
